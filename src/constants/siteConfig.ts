@@ -1,0 +1,42 @@
+export const SITE_CONFIG = {
+  name: "QuickWay Ride",
+  tagline: "Premium Taxi Booking & Travel Management Platform",
+  companyName: "QuickWay Ride Services Ltd.",
+  region: "Uttarakhand & Nearby Regions",
+  contact: {
+    phoneHotline: "+91 98765 43210",
+    phoneDisplay: "+91 98765 43210",
+    whatsappNumber: "919876543210",
+    supportEmail: "support@quickwayride.com",
+    emergencyPhone: "+91 98765 43211",
+    officeAddress: "Main Station Road, Near Railway Station, Roorkee, Uttarakhand 247667",
+    businessHours: "24 Hours / 7 Days a Week",
+  },
+  social: {
+    facebook: "https://facebook.com/quickwayride",
+    instagram: "https://instagram.com/quickwayride",
+    twitter: "https://twitter.com/quickwayride",
+    linkedin: "https://linkedin.com/company/quickwayride",
+  },
+  navLinks: [
+    { label: "Home", href: "/" },
+    { label: "About Us", href: "/about" },
+    { label: "Services", href: "/services" },
+    { label: "Fleet", href: "/fleet" },
+    { label: "Pricing", href: "/pricing" },
+    { label: "Tour Packages", href: "/packages" },
+    { label: "Gallery", href: "/gallery" },
+    { label: "Contact", href: "/contact" },
+  ],
+  secondaryLinks: [
+    { label: "Service Areas", href: "/service-areas" },
+    { label: "Corporate Cabs", href: "/corporate" },
+    { label: "Book Cabs", href: "/book" },
+  ],
+  seoDefaults: {
+    title: "QuickWay Ride - Premium Taxi & Outstation Cabs in Uttarakhand",
+    description: "Book reliable, safe, and comfortable taxis in Roorkee, Haridwar, Rishikesh, Dehradun, Saharanpur. Instant fare quotes, outstation drops & tour packages.",
+    url: "https://quickwayride.com",
+    ogImage: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=1200",
+  },
+};

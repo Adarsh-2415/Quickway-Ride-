@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Brand Colors */
+    --color-primary: #0F172A; /* Midnight Navy */
+    --color-primary-hover: #1E293B;
+    --color-primary-pressed: #020617;
+
+    --color-accent: #F59E0B; /* Premium Gold */
+    --color-accent-hover: #D97706;
+    --color-accent-pressed: #B45309;
+    --color-accent-text: #0F172A; /* High Contrast Navy Text on Gold */
+
+    --color-secondary: #2563EB; /* Royal Blue */
+    --color-secondary-hover: #1D4ED8;
+    --color-secondary-pressed: #1E40AF;
+
+    /* Neutrals */
+    --color-canvas: #FFFFFF;
+    --color-section-soft: #F8FAFC;
+    --color-border: #E2E8F0;
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748B;
+
+    /* Soft Surface Tints */
+    --surface-accent-soft: #FEF3C7;
+    --surface-secondary-soft: #EFF6FF;
+    --surface-success-soft: #DCFCE7;
+    --surface-warning-soft: #FFEDD5;
+    --surface-error-soft: #FEE2E2;
+
+    /* Semantic Feedback Colors */
+    --color-success: #16A34A;
+    --color-warning: #F97316;
+    --color-error: #DC2626;
+    --color-info: #0EA5E9;
+
+    /* Focus Ring Accessibility Tokens */
+    --focus-ring-color: #F59E0B;
+    --focus-ring-shadow: 0 0 0 3px rgba(245, 158, 11, 0.35);
+
+    /* Border Radius Tokens */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    --radius-full: 9999px;
+
+    /* Spacing Scale Tokens */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* Elevation Shadow Tokens */
+    --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.12), 0 4px 6px -4px rgba(15, 23, 42, 0.08);
+    --shadow-accent-glow: 0 10px 25px -5px rgba(245, 158, 11, 0.3);
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Accessible Focus Management */
+  *:focus-visible {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: 2px;
+    box-shadow: var(--focus-ring-shadow);
+  }
+}
+
+/* Custom Design Token Utilities */
+.btn-gold-cta {
+  background-color: var(--color-accent);
+  color: var(--color-accent-text);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-gold-cta:hover {
+  background-color: var(--color-accent-hover);
+  box-shadow: var(--shadow-accent-glow);
+}
+
+.btn-gold-cta:active {
+  background-color: var(--color-accent-pressed);
+}
+
+.btn-navy {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-navy:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.card-luxury {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-luxury:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.hero-dark-bg {
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+  color: #FFFFFF;
+}
