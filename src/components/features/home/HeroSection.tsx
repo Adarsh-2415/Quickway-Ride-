@@ -1,6 +1,7 @@
+"use client";
+
 import React from "react";
-import Image from "next/image";
-import { PhoneCall, Shield, CheckCircle2, MessageSquare, ArrowRight } from "lucide-react";
+import { PhoneCall, CheckCircle2, MessageSquare, Star, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { HeroBookingWidget } from "./HeroBookingWidget";
 import { HeroTrustBadges } from "./HeroTrustBadges";
@@ -10,16 +11,17 @@ import { SITE_CONFIG } from "@/constants/siteConfig";
 
 export const HeroSection: React.FC = () => {
   return (
-    <div className="relative w-full hero-dark-bg overflow-hidden text-white pt-6 pb-0">
-      {/* Background Lighting & Grid Effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(245,158,11,0.15),rgba(255,255,255,0))]" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative w-full hero-dark-bg overflow-hidden text-white pt-6 pb-0 select-none">
+      {/* Background Radial Glow Spotlight */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(245,158,11,0.18),rgba(255,255,255,0))]" />
+      <div className="absolute top-1/4 right-10 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <Container className="relative z-10 pt-4 pb-16 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          {/* Left Column: Brand Message, Value Proposition & Trust Badges */}
+          
+          {/* Left Column: Brand Message, Value Propositions & Direct Touchpoints */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            {/* Trust Badges Bar */}
+            {/* Trust Proof Badges */}
             <HeroTrustBadges />
 
             {/* Main Headline */}
@@ -48,7 +50,7 @@ export const HeroSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Fixed Rates • No Hidden Charges</span>
+                <span>Fixed Rates • No Surge Fee</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
@@ -56,7 +58,7 @@ export const HeroSection: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Clean & Sanitized Vehicles</span>
+                <span>Clean & Sanitized Cabs</span>
               </div>
             </div>
 
@@ -66,7 +68,7 @@ export const HeroSection: React.FC = () => {
                 <Button
                   variant="primary"
                   size="lg"
-                  className="font-bold text-slate-900"
+                  className="font-bold text-slate-900 shadow-lg shadow-amber-500/20"
                   iconLeft={<PhoneCall className="w-4 h-4 stroke-[2.5]" />}
                 >
                   Call {SITE_CONFIG.contact.phoneDisplay}
@@ -74,14 +76,14 @@ export const HeroSection: React.FC = () => {
               </a>
 
               <a
-                href={`https://wa.me/${SITE_CONFIG.contact.whatsappNumber}?text=${encodeURIComponent("Hi QuickWay Ride, I want to inquire about a taxi.")}`}
+                href={`https://wa.me/${SITE_CONFIG.contact.whatsappNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hi QuickWay Ride, I want to inquire about a taxi.")}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Button
                   variant="outline"
                   size="lg"
-                  className="bg-emerald-600/90 text-white border-emerald-500 hover:bg-emerald-700"
+                  className="bg-emerald-600/90 text-white border-emerald-500 hover:bg-emerald-700 shadow-md"
                   iconLeft={<MessageSquare className="w-4 h-4" />}
                 >
                   WhatsApp Cabs
@@ -89,26 +91,27 @@ export const HeroSection: React.FC = () => {
               </a>
             </div>
 
-            {/* Vehicle Preview / Driver Badge Card */}
-            <div className="pt-4 flex items-center gap-4 p-4 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md max-w-md">
-              <div className="w-12 h-12 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xl shrink-0">
+            {/* Fleet Status Card */}
+            <div className="pt-2 flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md max-w-md shadow-xl">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg shrink-0 border border-amber-500/30">
                 🚖
               </div>
               <div className="space-y-0.5">
-                <p className="text-xs font-bold text-amber-400 uppercase tracking-wide">
-                   Uttarakhand Fleet Ready
-                </p>
+                <span className="text-xs font-bold text-amber-400 uppercase tracking-wide block">
+                  Uttarakhand Fleet Active
+                </span>
                 <p className="text-xs text-slate-300 leading-snug">
-                  Sedans, Executive SUVs (Innova Crysta) & Tempo Travellers available 24/7.
+                  Sedans, Executive SUVs (Innova Crysta) & Tempo Travellers ready 24/7.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Embedded Instant Booking Widget */}
-          <div className="lg:col-span-6 relative">
+          {/* Right Column: Embedded Instant Booking Engine Widget */}
+          <div className="lg:col-span-6">
             <HeroBookingWidget />
           </div>
+
         </div>
       </Container>
 

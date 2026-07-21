@@ -4,12 +4,12 @@ export const SITE_CONFIG = {
   companyName: "QuickWay Ride Services Ltd.",
   region: "Uttarakhand & Nearby Regions",
   contact: {
-    phoneHotline: "+91 98765 43210",
-    phoneDisplay: "+91 98765 43210",
-    whatsappNumber: "919876543210",
-    supportEmail: "support@quickwayride.com",
-    emergencyPhone: "+91 98765 43211",
-    officeAddress: "Main Station Road, Near Railway Station, Roorkee, Uttarakhand 247667",
+    phoneHotline: "+91 8679506655",
+    phoneDisplay: "+91 8679506655",
+    whatsappNumber: "+91 8679506655",
+    supportEmail: "info@quickwayride.com",
+    emergencyPhone: "+91 8679506655",
+    officeAddress: "1st Floor, Opposite to Shiv Sani Mandir, Near Sai Lok Gate, GMS Road",
     businessHours: "24 Hours / 7 Days a Week",
   },
   social: {

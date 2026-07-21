@@ -35,7 +35,7 @@ export default function HomePage() {
       category: "Luxury SUV (6+1 / 7+1)",
       rate: "₹18 / KM",
       capacity: "7 Passengers • 4 Bags",
-      image: "https://images.unsplash.com/photo-1563720223185-11003d516935?q=80&w=800",
+      image: "/images/innova_crysta.jpg",
       tag: "Premium Luxury",
     },
     {
@@ -43,7 +43,7 @@ export default function HomePage() {
       category: "Group Tour Bus",
       rate: "₹26 / KM",
       capacity: "12-26 Passengers • Large Carrier",
-      image: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?q=80&w=800",
+      image: "/images/tempo_traveller.jpg",
       tag: "Group Delegation",
     },
   ];
