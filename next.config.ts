@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  reactStrictMode: false, // Prevents dual-render locks in dev
+  reactStrictMode: true,
   images: {
     remotePatterns: [
       {
@@ -13,12 +13,6 @@ const nextConfig: NextConfig = {
         hostname: "*.supabase.co",
       },
     ],
-  },
-  webpack: (config, { dev }) => {
-    if (dev) {
-      config.cache = false; // Prevents Windows pack-file locks
-    }
-    return config;
   },
 };
 

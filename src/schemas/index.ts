@@ -2,27 +2,27 @@ import { z } from "zod";
 
 export const phoneRegex = /^[6-9]\d{9}$/;
 
+// 1. Online Booking Engine Schema (14 Fields)
 export const bookingFormSchema = z.object({
-  trip_type: z.enum([
-    "outstation_oneway",
-    "outstation_roundtrip",
-    "local_rental",
-    "airport_transfer",
-  ]),
-  origin: z.string().min(2, "Pickup location is required"),
-  destination: z.string().optional(),
-  pickup_date: z.string().min(1, "Pickup date is required"),
-  pickup_time: z.string().min(1, "Pickup time is required"),
-  passengers: z.number().min(1, "At least 1 passenger is required").max(26, "Maximum 26 passengers"),
-  vehicle_id: z.string().min(1, "Please select a vehicle"),
-  rider_name: z.string().min(2, "Rider name must be at least 2 characters"),
-  rider_phone: z
+  customerName: z.string().min(2, "Full name must be at least 2 characters"),
+  mobileNumber: z
     .string()
-    .regex(phoneRegex, "Please enter a valid 10-digit Indian phone number"),
-  rider_email: z.string().email("Please enter a valid email address"),
-  special_instructions: z.string().optional(),
+    .regex(phoneRegex, "Please enter a valid 10-digit Indian phone number (starting with 6-9)"),
+  email: z.string().email("Please enter a valid email address").or(z.literal("")),
+  pickUpLocation: z.string().min(2, "Pick up location is required"),
+  dropOffLocation: z.string().min(2, "Drop off location is required"),
+  pickupDate: z.string().min(1, "Pickup date is required"),
+  pickupTime: z.string().min(1, "Pickup time is required"),
+  vehicleType: z.string().min(1, "Please select a vehicle type"),
+  tripSchedule: z.string().min(1, "Please select a trip schedule"),
+  tripType: z.string().min(1, "Please select a trip type"),
+  passengers: z.string().min(1, "Please select number of passengers"),
+  luggage: z.string().min(1, "Please select luggage type"),
+  message: z.string().optional(),
+  promoCode: z.string().optional(),
 });
 
+// 2. Contact Inquiry Form Schema
 export const contactFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   phone: z
@@ -33,16 +33,17 @@ export const contactFormSchema = z.object({
   message: z.string().min(10, "Message must be at least 10 characters").max(1000),
 });
 
-export const quoteRequestSchema = z.object({
-  company_name: z.string().min(2, "Company / Event name is required"),
-  contact_person: z.string().min(2, "Contact person name is required"),
-  phone: z.string().regex(phoneRegex, "Please enter a valid 10-digit phone number"),
-  email: z.string().email("Please enter a valid email address"),
-  service_requirement: z.string().min(1, "Please select requirement type"),
-  estimated_passengers: z.number().min(1),
-  trip_details: z.string().min(10, "Please describe trip details"),
+// 3. Custom Cab Quote Request Schema (7 Fields)
+export const quoteFormSchema = z.object({
+  origin: z.string().min(2, "Origin location is required"),
+  destination: z.string().min(2, "Destination location is required"),
+  journeyDate: z.string().min(1, "Journey date is required"),
+  journeySchedule: z.string().min(1, "Please select a journey schedule"),
+  passengersAndLuggage: z.string().optional(),
+  vehicleType: z.string().min(1, "Please select a vehicle type"),
+  message: z.string().optional(),
 });
 
 export type BookingFormValues = z.infer<typeof bookingFormSchema>;
 export type ContactFormValues = z.infer<typeof contactFormSchema>;
-export type QuoteRequestValues = z.infer<typeof quoteRequestSchema>;
+export type QuoteFormValues = z.infer<typeof quoteFormSchema>;
