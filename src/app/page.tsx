@@ -5,11 +5,11 @@ import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Grid } from "@/components/layout/Grid";
 import { FeatureCard, Card } from "@/components/cards/Card";
-import { PageHeading, SectionHeading, SubHeading } from "@/components/typography/Headings";
-import { BodyRegular, BodyLarge } from "@/components/typography/Text";
+import { SectionHeading } from "@/components/typography/Headings";
+import { BodyRegular } from "@/components/typography/Text";
 import { Button } from "@/components/buttons/Button";
 import { Badge } from "@/components/badges/Badge";
-import { ShieldCheck, Clock, Award, Users, MapPin, Car, ArrowRight, PhoneCall, Sparkles, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Clock, Award, Users, ArrowRight, PhoneCall, Sparkles } from "lucide-react";
 import { SITE_CONFIG } from "@/constants/siteConfig";
 
 export default function HomePage() {
@@ -19,7 +19,7 @@ export default function HomePage() {
       category: "Sedan (4+1 Seater)",
       rate: "₹12 / KM",
       capacity: "4 Passengers • 2 Bags",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800",
+      image: "/images/swift.jfif",
       tag: "Most Popular",
     },
     {
@@ -27,7 +27,7 @@ export default function HomePage() {
       category: "Executive SUV (6+1 Seater)",
       rate: "₹15 / KM",
       capacity: "6 Passengers • 3 Bags",
-      image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=800",
+      image: "/images/ertiga.jfif",
       tag: "Family Favorite",
     },
     {
@@ -35,7 +35,7 @@ export default function HomePage() {
       category: "Luxury SUV (6+1 / 7+1)",
       rate: "₹18 / KM",
       capacity: "7 Passengers • 4 Bags",
-      image: "/images/innova_crysta.jpg",
+      image: "/images/innova crysta.jfif",
       tag: "Premium Luxury",
     },
     {
@@ -43,7 +43,7 @@ export default function HomePage() {
       category: "Group Tour Bus",
       rate: "₹26 / KM",
       capacity: "12-26 Passengers • Large Carrier",
-      image: "/images/tempo_traveller.jpg",
+      image: "/images/Tempo Traveller.jfif",
       tag: "Group Delegation",
     },
   ];
@@ -138,11 +138,11 @@ export default function HomePage() {
           <Grid cols={1} colsMd={2} colsLg={4} gap={6}>
             {featuredFleet.map((v) => (
               <Card key={v.name} variant="standard" isHoverable className="p-0 flex flex-col justify-between">
-                <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                <div className="relative h-48 w-full bg-slate-100 p-2 overflow-hidden">
                   <img
                     src={v.image}
                     alt={v.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3">
                     <Badge variant="primary">{v.tag}</Badge>
@@ -154,14 +154,10 @@ export default function HomePage() {
                     <p className="text-xs text-slate-500 font-medium">{v.category}</p>
                     <p className="text-xs text-slate-600 mt-2 font-medium">{v.capacity}</p>
                   </div>
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-xs text-slate-500 block">Rate Starts At</span>
-                      <span className="font-heading font-extrabold text-amber-600 text-lg">{v.rate}</span>
-                    </div>
-                    <Link href={`/book?vehicle=${encodeURIComponent(v.name)}`}>
-                      <Button variant="primary" size="sm">
-                        Book
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-end">
+                    <Link href={`/book?vehicle=${encodeURIComponent(v.name)}`} className="w-full">
+                      <Button variant="primary" size="sm" className="w-full justify-center font-bold text-slate-900">
+                        Book Now
                       </Button>
                     </Link>
                   </div>

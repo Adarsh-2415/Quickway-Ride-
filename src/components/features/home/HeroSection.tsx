@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PhoneCall, CheckCircle2, MessageSquare, Star, ShieldCheck } from "lucide-react";
+import { PhoneCall, CheckCircle2, MessageSquare } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { HeroBookingWidget } from "./HeroBookingWidget";
 import { HeroTrustBadges } from "./HeroTrustBadges";

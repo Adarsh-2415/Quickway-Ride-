@@ -23,7 +23,7 @@ export const AboutFleetGrid: React.FC = () => {
       luggage: "2 Medium, 1 Cabin, 1 Backpack",
       ac: "AC (Only in Plains)",
       fuel: "Petrol, Petrol+CNG",
-      image: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800",
+      image: "/images/swift.jfif",
       tag: "Popular Outstation",
     },
     {
@@ -34,7 +34,7 @@ export const AboutFleetGrid: React.FC = () => {
       luggage: "3 Medium, 1 Cabin, 1 Backpack",
       ac: "AC (Only in Plains)",
       fuel: "Petrol, Petrol+CNG, Diesel",
-      image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=800",
+      image: "/images/ertiga.jfif",
       tag: "Family Favorite",
     },
     {
@@ -45,7 +45,7 @@ export const AboutFleetGrid: React.FC = () => {
       luggage: "3 Large, 1 Medium, 1 Backpack",
       ac: "Dual Executive AC",
       fuel: "Diesel",
-      image: "/images/innova_crysta.jpg",
+      image: "/images/innova crysta.jfif",
       tag: "Premium Luxury",
     },
     {
@@ -56,7 +56,7 @@ export const AboutFleetGrid: React.FC = () => {
       luggage: "Large Carrier & Dedicated Boot",
       ac: "Executive Dual AC",
       fuel: "Diesel",
-      image: "/images/tempo_traveller.jpg",
+      image: "/images/Tempo Traveller.jfif",
       tag: "Group Delegation",
     },
   ];
@@ -85,11 +85,11 @@ export const AboutFleetGrid: React.FC = () => {
             >
               <Card variant="standard" isHoverable className="p-0 flex flex-col justify-between h-full">
                 {/* Vehicle Image Header */}
-                <div className="relative h-52 w-full overflow-hidden bg-slate-100">
+                <div className="relative h-56 w-full overflow-hidden bg-slate-100 p-2">
                   <img
                     src={vehicle.image}
                     alt={vehicle.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-3 left-3 flex items-center gap-2">
                     <Badge variant="primary">{vehicle.tag}</Badge>

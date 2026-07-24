@@ -129,3 +129,19 @@
   background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
   color: #FFFFFF;
 }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.3333%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+

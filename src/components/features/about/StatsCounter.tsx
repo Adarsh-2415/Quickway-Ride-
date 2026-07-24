@@ -10,8 +10,8 @@ export const StatsCounter: React.FC = () => {
   const stats = [
     {
       label: "Year Established",
-      value: "2024",
-      subtext: "2+ Years of Excellence",
+      value: "2026",
+      subtext: "1+ Years of Excellence",
       icon: <Calendar className="w-6 h-6 text-amber-500" />,
     },
     {

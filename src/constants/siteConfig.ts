@@ -10,6 +10,7 @@ export const SITE_CONFIG = {
     supportEmail: "info@quickwayride.com",
     emergencyPhone: "+91 8679506655",
     officeAddress: "1st Floor, Opposite to Shiv Sani Mandir, Near Sai Lok Gate, GMS Road",
+    googleMapUrl: "https://maps.app.goo.gl/mESPwJUT69WaT6Pa6?g_st=awb",
     businessHours: "24 Hours / 7 Days a Week",
   },
   social: {

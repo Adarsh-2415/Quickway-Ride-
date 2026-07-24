@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, ShieldCheck, CheckCircle2, Award } from "lucide-react";
+import { Star, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Badge } from "@/components/badges/Badge";
 
 export const HeroTrustBadges: React.FC = () => {
