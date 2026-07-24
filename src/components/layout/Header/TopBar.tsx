@@ -15,7 +15,7 @@ export const TopBar: React.FC = () => {
             className="flex items-center gap-2 text-slate-300 hover:text-amber-400 transition-colors"
           >
             <PhoneCall className="w-3.5 h-3.5 text-amber-500" />
-            <span className="font-semibold">24/7 Support:</span>
+            <span className="font-semibold">Support:</span>
             <span>{SITE_CONFIG.contact.phoneDisplay}</span>
           </a>
 
@@ -31,7 +31,7 @@ export const TopBar: React.FC = () => {
             <MapPin className="w-3.5 h-3.5 text-amber-500" />
             <span className="font-medium">Service Cities:</span>
             <span className="text-slate-300 font-normal">
-              Roorkee • Haridwar • Rishikesh • Dehradun • Saharanpur
+              Delhi • Roorkee • Haridwar • Rishikesh • Dehradun • Saharanpur
             </span>
           </div>
         </div>

@@ -30,7 +30,7 @@ export const FleetFeatures: React.FC = () => {
           <FeatureCard
             icon={<Navigation className="w-6 h-6 text-amber-600" />}
             title="Real-Time GPS Tracking"
-            description="Every vehicle in our fleet is monitored 24/7 via live GPS telemetry for passenger safety."
+            description="Every vehicle in our fleet is monitored via live GPS telemetry for passenger safety."
           />
 
           <FeatureCard

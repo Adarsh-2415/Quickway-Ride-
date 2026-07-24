@@ -119,7 +119,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose }) =
                 className="flex items-center justify-center gap-2 p-2.5 rounded-lg bg-emerald-50 text-emerald-900 border border-emerald-200 text-xs font-semibold hover:bg-emerald-100 transition-colors"
               >
                 <MessageSquare className="w-4 h-4 text-emerald-600" />
-                Chat on WhatsApp 24/7
+                Chat on WhatsApp
               </a>
 
               {/* Direct Touchpoints */}

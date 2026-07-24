@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 const SERVICE_REGIONS = [
   { city: "Dehradun Capital City", hubs: ["GMS Road HQ", "Jolly Grant Airport", "ISBT Dehradun", "Rajpur Road"], cabs: "Sedan, Ertiga, Innova, Urbania" },
-  { city: "Roorkee & IIT Hub", hubs: ["Roorkee Junction", "IIT Main Gate", "Civil Lines", "National Highway 58"], cabs: "24/7 Outstation Cabs" },
+  { city: "Roorkee & IIT Hub", hubs: ["Roorkee Junction", "IIT Main Gate", "Civil Lines", "National Highway 58"], cabs: "Outstation Cabs" },
   { city: "Haridwar Pilgrimage Hub", hubs: ["Har Ki Pauri Ghat", "Haridwar Railway Station", "BHEL Complex"], cabs: "Express Ganga Aarti Pickup" },
   { city: "Rishikesh Yoga Capital", hubs: ["Triveni Ghat", "Lakshman Jhula", "Tapovan", "Shivpuri Rafting Point"], cabs: "Tourist Special Cabs" },
   { city: "Saharanpur Railway Hub", hubs: ["Saharanpur Junction", "Court Road", "Delhi Road"], cabs: "Intercity Cabs" },
@@ -35,7 +35,7 @@ export default function ServiceAreasPage() {
             QuickWay Ride Service Areas
           </h1>
           <p className="text-slate-300 text-sm sm:text-base">
-            Operational 24/7 cab pick-up hubs across Uttarakhand, Uttar Pradesh, Punjab, Haryana & Delhi NCR.
+            Operational cab pick-up hubs across Uttarakhand, Uttar Pradesh, Punjab, Haryana & Delhi NCR.
           </p>
         </Container>
       </section>

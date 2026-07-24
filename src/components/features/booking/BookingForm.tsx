@@ -1,15 +1,93 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { Card } from "@/components/cards/Card";
+import {
+  MapPin,
+  Navigation,
+  Calendar,
+  Clock,
+  Car,
+  User,
+  Phone,
+  Mail,
+  Tag,
+  CheckCircle2,
+  ArrowRight,
+  ArrowLeft,
+  Plane,
+  Sparkles,
+  ShieldCheck,
+  Users,
+  Briefcase,
+  Check,
+} from "lucide-react";
 import { Button } from "@/components/buttons/Button";
-import { CheckCircle2, Send, Tag } from "lucide-react";
 import { bookingFormSchema, BookingFormValues } from "@/schemas";
+import { cn } from "@/lib/utils";
+import { PickupTimeSelector } from "./PickupTimeSelector";
+
+// Vehicle options with images & pricing metadata
+const VEHICLE_OPTIONS = [
+  {
+    id: "Sedan",
+    name: "Maruti Dzire / Etios",
+    category: "Sedan (4+1 Seater)",
+    rate: "₹12 / KM",
+    capacity: "4 Passengers",
+    luggage: "2 Bags",
+    image: "/images/swift.jfif",
+    popularTag: "Most Popular",
+  },
+  {
+    id: "Executive SUV",
+    name: "Maruti Ertiga / XL6",
+    category: "Executive SUV (6+1 Seater)",
+    rate: "₹15 / KM",
+    capacity: "6 Passengers",
+    luggage: "3 Bags",
+    image: "/images/ertiga.jfif",
+    popularTag: "Family Choice",
+  },
+  {
+    id: "Luxury SUV",
+    name: "Toyota Innova Crysta",
+    category: "Luxury SUV (6+1 / 7+1)",
+    rate: "₹18 / KM",
+    capacity: "7 Passengers",
+    luggage: "4 Bags",
+    image: "/images/innova crysta.jfif",
+    popularTag: "Premium Comfort",
+  },
+  {
+    id: "Tempo Traveller",
+    name: "Force Urbania / Tempo Traveller",
+    category: "Group Delegation (12-26 Seater)",
+    rate: "₹26 / KM",
+    capacity: "12-26 Passengers",
+    luggage: "Large Carrier",
+    image: "/images/Tempo Traveller.jfif",
+    popularTag: "Group Tour",
+  },
+];
+
+// Quick Route Preset Chips (From Official Pricing Page)
+const QUICK_ROUTES = [
+  { from: "Dehradun", to: "Delhi" },
+  { from: "Dehradun", to: "Jollygrant Airport" },
+  { from: "Dehradun", to: "Haridwar" },
+  { from: "Dehradun", to: "Rishikesh" },
+  { from: "Dehradun", to: "Mussoorie" },
+  { from: "Dehradun", to: "Roorkee" },
+  { from: "Dehradun", to: "Chandigarh" },
+];
 
 export const BookingForm: React.FC = () => {
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [promoApplied, setPromoApplied] = useState(false);
   const [submittedData, setSubmittedData] = useState<BookingFormValues | null>(null);
 
@@ -17,6 +95,8 @@ export const BookingForm: React.FC = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
+    trigger,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<BookingFormValues>({
@@ -27,8 +107,8 @@ export const BookingForm: React.FC = () => {
       email: "",
       pickUpLocation: "",
       dropOffLocation: "",
-      pickupDate: "",
-      pickupTime: "",
+      pickupDate: new Date().toISOString().split("T")[0],
+      pickupTime: "09:00",
       vehicleType: "Maruti Dzire / Etios (Sedan 4+1)",
       tripSchedule: "One-Way",
       tripType: "Outstation Drop",
@@ -39,8 +119,22 @@ export const BookingForm: React.FC = () => {
     },
   });
 
-  const promoCodeValue = watch("promoCode");
+  const watchValues = watch();
+  const selectedVehicleName = watchValues.vehicleType;
+  const promoCodeValue = watchValues.promoCode;
 
+  // Find active vehicle object
+  const selectedVehicleObj =
+    VEHICLE_OPTIONS.find((v) => selectedVehicleName.includes(v.id)) || VEHICLE_OPTIONS[0];
+
+  // Quick route apply handler
+  const applyQuickRoute = (from: string, to: string) => {
+    setValue("pickUpLocation", from, { shouldValidate: true });
+    setValue("dropOffLocation", to, { shouldValidate: true });
+    toast.success(`Preset applied: ${from} ➔ ${to}`);
+  };
+
+  // Promo code handler
   const handlePromoApply = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!promoCodeValue || !promoCodeValue.trim()) {
@@ -51,334 +145,708 @@ export const BookingForm: React.FC = () => {
     toast.success(`Promo code "${promoCodeValue.toUpperCase()}" applied successfully!`);
   };
 
+  // Step 1 Validation & Next
+  const goToStep2 = async () => {
+    const isValid = await trigger([
+      "pickUpLocation",
+      "dropOffLocation",
+      "pickupDate",
+      "pickupTime",
+      "tripType",
+      "tripSchedule",
+    ]);
+    if (isValid) {
+      setCurrentStep(2);
+    } else {
+      toast.error("Please fill in all required journey details.");
+    }
+  };
+
+  // Step 2 Validation & Next
+  const goToStep3 = async () => {
+    const isValid = await trigger(["vehicleType", "passengers", "luggage"]);
+    if (isValid) {
+      setCurrentStep(3);
+    } else {
+      toast.error("Please select a vehicle.");
+    }
+  };
+
+  // Final Form Submission
   const onSubmit = async (data: BookingFormValues) => {
-    // Simulate server action submission preparation
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setSubmittedData(data);
     toast.success("Taxi Booking Submitted Successfully!");
   };
 
   return (
-    <Card variant="standard" className="p-6 sm:p-10 space-y-8 border border-slate-200 shadow-xl max-w-4xl mx-auto bg-white rounded-2xl">
-      <div className="border-b border-slate-100 pb-5">
-        <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900">
-          Online Taxi Booking
-        </h2>
-        <p className="text-sm text-slate-600 mt-1">
-          Complete the details below to reserve your ride with QuickWay Ride.
-        </p>
-      </div>
+    <div className="w-full max-w-4xl mx-auto bg-white rounded-3xl border border-slate-200/80 shadow-2xl select-none relative">
+      {/* Form Header & Stepper */}
+      <div className="bg-slate-950 text-white p-6 sm:p-8 rounded-t-3xl border-b border-slate-800 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      {submittedData ? (
-        <div className="p-8 text-center space-y-5 bg-emerald-50 border border-emerald-200 rounded-2xl">
-          <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-8 h-8" />
+        <div className="text-center max-w-xl mx-auto space-y-2 mb-8 relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-semibold uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5" /> QuickWay Express Booking
           </div>
-          <h3 className="font-heading font-extrabold text-2xl text-emerald-950">
-            Booking Request Received!
-          </h3>
-          <p className="text-sm text-emerald-800 max-w-lg mx-auto leading-relaxed">
-            Thank you <strong>{submittedData.customerName}</strong>. Your trip from <strong>{submittedData.pickUpLocation}</strong> to <strong>{submittedData.dropOffLocation}</strong> on <strong>{submittedData.pickupDate} at {submittedData.pickupTime}</strong> has been registered. Our operations team will call you at <strong>{submittedData.mobileNumber}</strong> shortly.
+          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight">
+            Reserve Your Uttarakhand Taxi
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400">
+            Instant booking confirmation • Zero surge pricing • Verified Drivers
           </p>
-          <Button
-            variant="outline"
-            size="md"
-            onClick={() => {
-              setSubmittedData(null);
-              setPromoApplied(false);
-              reset();
-            }}
-          >
-            Book Another Ride
-          </Button>
         </div>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-          {/* Row 1: Customer Name & Mobile Number */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-1.5">
-              <label htmlFor="booking-customerName" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Customer Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="booking-customerName"
-                type="text"
-                placeholder="Enter full name"
-                {...register("customerName")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
+
+        {/* 3-Step Visual Progress Stepper */}
+        {!submittedData && (
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <div className="flex items-center justify-between relative">
+              {/* Connector Bar */}
+              <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-800 -translate-y-1/2 z-0" />
+              <div
+                className="absolute top-1/2 left-0 h-0.5 bg-amber-400 -translate-y-1/2 z-0 transition-all duration-500"
+                style={{
+                  width: currentStep === 1 ? "0%" : currentStep === 2 ? "50%" : "100%",
+                }}
               />
-              {errors.customerName && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.customerName.message}</p>
-              )}
-            </div>
 
-            <div className="space-y-1.5">
-              <label htmlFor="booking-mobileNumber" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Mobile Number <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="booking-mobileNumber"
-                type="tel"
-                placeholder="Enter 10-digit mobile number"
-                {...register("mobileNumber")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              />
-              {errors.mobileNumber && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.mobileNumber.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Row 2: Email & Trip Type */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-1.5">
-              <label htmlFor="booking-email" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Email
-              </label>
-              <input
-                id="booking-email"
-                type="email"
-                placeholder="Enter email address"
-                {...register("email")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              />
-              {errors.email && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.email.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="booking-tripType" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Trip Type
-              </label>
-              <select
-                id="booking-tripType"
-                {...register("tripType")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              >
-                <option value="Outstation Drop">Outstation Drop</option>
-                <option value="Airport Transfer">Airport Transfer</option>
-                <option value="Local Sightseeing">Local Sightseeing</option>
-                <option value="Char Dham Pilgrimage">Char Dham Pilgrimage</option>
-                <option value="Corporate / Event Contract">Corporate / Event Contract</option>
-              </select>
-              {errors.tripType && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.tripType.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Row 3: Pick Up Location & Drop Off Location */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-1.5">
-              <label htmlFor="booking-pickUpLocation" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Pick Up Location <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="booking-pickUpLocation"
-                type="text"
-                placeholder="Enter pickup city or landmark"
-                {...register("pickUpLocation")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              />
-              {errors.pickUpLocation && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.pickUpLocation.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="booking-dropOffLocation" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Drop Off Location <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="booking-dropOffLocation"
-                type="text"
-                placeholder="Enter drop off city or landmark"
-                {...register("dropOffLocation")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              />
-              {errors.dropOffLocation && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.dropOffLocation.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Row 4: Pickup Date & Pickup Time */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-1.5">
-              <label htmlFor="booking-pickupDate" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Pickup Date <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="booking-pickupDate"
-                type="date"
-                {...register("pickupDate")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              />
-              {errors.pickupDate && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.pickupDate.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="booking-pickupTime" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Pickup Time <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="booking-pickupTime"
-                type="time"
-                {...register("pickupTime")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              />
-              {errors.pickupTime && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.pickupTime.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Row 5: Vehicle Type & Trip Schedule */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-1.5">
-              <label htmlFor="booking-vehicleType" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Vehicle Type
-              </label>
-              <select
-                id="booking-vehicleType"
-                {...register("vehicleType")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              >
-                <option value="Maruti Dzire / Etios (Sedan 4+1)">Maruti Dzire / Etios (Sedan 4+1)</option>
-                <option value="Maruti Ertiga / XL6 (Executive SUV 6+1)">Maruti Ertiga / XL6 (Executive SUV 6+1)</option>
-                <option value="Toyota Innova Crysta (Luxury SUV 6+1 / 7+1)">Toyota Innova Crysta (Luxury SUV 6+1 / 7+1)</option>
-                <option value="Tempo Traveller / Force Urbania (Group 12-26)">Tempo Traveller / Force Urbania (Group 12-26)</option>
-              </select>
-              {errors.vehicleType && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.vehicleType.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="booking-tripSchedule" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Trip Schedule
-              </label>
-              <select
-                id="booking-tripSchedule"
-                {...register("tripSchedule")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              >
-                <option value="One-Way">One-Way</option>
-                <option value="Round-Trip">Round-Trip</option>
-                <option value="Local Hourly Package">Local Hourly Package</option>
-              </select>
-              {errors.tripSchedule && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.tripSchedule.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Row 6: Passengers & Luggage */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div className="space-y-1.5">
-              <label htmlFor="booking-passengers" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Passengers
-              </label>
-              <select
-                id="booking-passengers"
-                {...register("passengers")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              >
-                <option value="1">1 Passenger</option>
-                <option value="2">2 Passengers</option>
-                <option value="3">3 Passengers</option>
-                <option value="4">4 Passengers</option>
-                <option value="5">5 Passengers</option>
-                <option value="6">6 Passengers</option>
-                <option value="7">7 Passengers</option>
-                <option value="8-12">8 - 12 Passengers</option>
-                <option value="13-26">13 - 26 Passengers</option>
-              </select>
-              {errors.passengers && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.passengers.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="booking-luggage" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                Luggage
-              </label>
-              <select
-                id="booking-luggage"
-                {...register("luggage")}
-                className="w-full h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white"
-              >
-                <option value="No Luggage">No Luggage</option>
-                <option value="1-2 Bags">1 - 2 Small / Medium Bags</option>
-                <option value="3-4 Bags">3 - 4 Bags</option>
-                <option value="Heavy Carrier Luggage">Heavy Carrier Luggage</option>
-              </select>
-              {errors.luggage && (
-                <p className="text-xs font-semibold text-red-500 mt-1">{errors.luggage.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Row 7: Promo Code */}
-          <div className="space-y-1.5">
-            <label htmlFor="booking-promoCode" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-              Promo Code
-            </label>
-            <div className="flex gap-2">
-              <input
-                id="booking-promoCode"
-                type="text"
-                placeholder="Enter promo code if any"
-                {...register("promoCode")}
-                className="flex-1 h-11 px-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white uppercase"
-              />
+              {/* Step 1 Circle */}
               <button
                 type="button"
-                onClick={handlePromoApply}
-                className="px-5 h-11 rounded-lg bg-slate-900 text-amber-400 font-bold text-xs hover:bg-slate-800 transition-colors shrink-0 flex items-center gap-1.5 cursor-pointer"
+                onClick={() => setCurrentStep(1)}
+                className="relative z-10 flex flex-col items-center gap-1.5 focus:outline-none group cursor-pointer"
               >
-                <Tag className="w-3.5 h-3.5" /> Apply Code
+                <div
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 border-2",
+                    currentStep >= 1
+                      ? "bg-amber-400 text-slate-950 border-amber-400 shadow-md shadow-amber-400/30"
+                      : "bg-slate-900 text-slate-500 border-slate-800"
+                  )}
+                >
+                  {currentStep > 1 ? <Check className="w-5 h-5 stroke-[3]" /> : "1"}
+                </div>
+                <span
+                  className={cn(
+                    "text-xs font-bold transition-colors",
+                    currentStep >= 1 ? "text-amber-400" : "text-slate-500"
+                  )}
+                >
+                  1. Ride Details
+                </span>
+              </button>
+
+              {/* Step 2 Circle */}
+              <button
+                type="button"
+                onClick={() => currentStep > 1 && setCurrentStep(2)}
+                className="relative z-10 flex flex-col items-center gap-1.5 focus:outline-none group cursor-pointer"
+              >
+                <div
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 border-2",
+                    currentStep >= 2
+                      ? "bg-amber-400 text-slate-950 border-amber-400 shadow-md shadow-amber-400/30"
+                      : "bg-slate-900 text-slate-500 border-slate-800"
+                  )}
+                >
+                  {currentStep > 2 ? <Check className="w-5 h-5 stroke-[3]" /> : "2"}
+                </div>
+                <span
+                  className={cn(
+                    "text-xs font-bold transition-colors",
+                    currentStep >= 2 ? "text-amber-400" : "text-slate-500"
+                  )}
+                >
+                  2. Choose Vehicle
+                </span>
+              </button>
+
+              {/* Step 3 Circle */}
+              <button
+                type="button"
+                onClick={() => currentStep === 3 && setCurrentStep(3)}
+                className="relative z-10 flex flex-col items-center gap-1.5 focus:outline-none group cursor-pointer"
+              >
+                <div
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 border-2",
+                    currentStep === 3
+                      ? "bg-amber-400 text-slate-950 border-amber-400 shadow-md shadow-amber-400/30"
+                      : "bg-slate-900 text-slate-500 border-slate-800"
+                  )}
+                >
+                  3
+                </div>
+                <span
+                  className={cn(
+                    "text-xs font-bold transition-colors",
+                    currentStep === 3 ? "text-amber-400" : "text-slate-500"
+                  )}
+                >
+                  3. Rider Info
+                </span>
               </button>
             </div>
-            {promoApplied && (
-              <p className="text-xs font-bold text-emerald-600 mt-1">
-                ✓ Promo Code Applied Successfully!
+          </div>
+        )}
+      </div>
+
+      {/* Main Body */}
+      <div className="p-6 sm:p-10">
+        {submittedData ? (
+          /* Success Screen */
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-8 text-center space-y-6 bg-emerald-50/80 border border-emerald-200 rounded-3xl"
+          >
+            <div className="w-16 h-16 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/30">
+              <CheckCircle2 className="w-10 h-10" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-emerald-950">
+                Booking Request Confirmed!
+              </h3>
+              <p className="text-sm text-emerald-800 max-w-lg mx-auto leading-relaxed">
+                Thank you <strong>{submittedData.customerName}</strong>. Your cab request from{" "}
+                <strong>{submittedData.pickUpLocation}</strong> to <strong>{submittedData.dropOffLocation}</strong> on{" "}
+                <strong>{submittedData.pickupDate} at {submittedData.pickupTime}</strong> has been registered.
               </p>
-            )}
-          </div>
+            </div>
 
-          {/* Row 8: Message */}
-          <div className="space-y-1.5">
-            <label htmlFor="booking-message" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-              Message
-            </label>
-            <textarea
-              id="booking-message"
-              rows={3}
-              placeholder="Any special instructions or landmark details..."
-              {...register("message")}
-              className="w-full p-4 text-sm rounded-lg border border-slate-300 focus:outline-2 focus:outline-amber-500 bg-white resize-none"
-            />
-          </div>
+            <div className="p-4 bg-white rounded-2xl border border-emerald-200 max-w-md mx-auto text-left space-y-2 text-xs text-slate-700 shadow-sm">
+              <div className="flex justify-between border-b pb-2">
+                <span className="font-semibold text-slate-500">Selected Vehicle:</span>
+                <span className="font-bold text-slate-900">{submittedData.vehicleType}</span>
+              </div>
+              <div className="flex justify-between border-b pb-2">
+                <span className="font-semibold text-slate-500">Contact Phone:</span>
+                <span className="font-bold text-slate-900">{submittedData.mobileNumber}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-slate-500">Dispatch Status:</span>
+                <span className="font-bold text-emerald-600">Assigned Driver Will Call Shortly</span>
+              </div>
+            </div>
 
-          {/* Submit Button */}
-          <div className="pt-2">
             <Button
-              type="submit"
-              variant="primary"
+              variant="outline"
               size="lg"
-              isLoading={isSubmitting}
-              className="w-full justify-center font-extrabold text-slate-950 bg-amber-400 hover:bg-amber-500 h-12 text-base shadow-md cursor-pointer"
-              iconRight={<Send className="w-4 h-4" />}
+              onClick={() => {
+                setSubmittedData(null);
+                setPromoApplied(false);
+                setCurrentStep(1);
+                reset();
+              }}
+              className="bg-white border-emerald-400 text-emerald-800 hover:bg-emerald-100 font-bold"
             >
-              Confirm & Book Taxi Now
+              Book Another Ride
             </Button>
-          </div>
-        </form>
-      )}
-    </Card>
+          </motion.div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <AnimatePresence mode="wait">
+              {/* STEP 1: RIDE DETAILS */}
+              {currentStep === 1 && (
+                <motion.div
+                  key="step1"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  {/* Trip Type Selector Pills */}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                      Select Trip Type
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      {[
+                        { label: "Outstation Drop", icon: MapPin },
+                        { label: "Airport Transfer", icon: Plane },
+                        { label: "Local Sightseeing", icon: Clock },
+                        { label: "Char Dham Pilgrimage", icon: Sparkles },
+                      ].map((t) => {
+                        const Icon = t.icon;
+                        const isSelected = watchValues.tripType === t.label;
+                        return (
+                          <button
+                            key={t.label}
+                            type="button"
+                            onClick={() => setValue("tripType", t.label)}
+                            className={cn(
+                              "flex items-center justify-center gap-2 p-3 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm",
+                              isSelected
+                                ? "bg-amber-400 border-amber-500 text-slate-950 shadow-md shadow-amber-500/20"
+                                : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                            )}
+                          >
+                            <Icon className="w-4 h-4 shrink-0" />
+                            <span>{t.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Quick Popular Route Presets */}
+                  <div className="space-y-2">
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                      ⚡ Popular Preset Routes (Click to Auto-Fill):
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {QUICK_ROUTES.map((r, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => applyQuickRoute(r.from, r.to)}
+                          className="px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200/80 text-amber-900 text-xs font-semibold hover:bg-amber-100 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                        >
+                          <span>{r.from}</span>
+                          <span className="text-amber-500 font-bold">➔</span>
+                          <span>{r.to}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Pickup & Drop Off Locations */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-pickUpLocation" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <MapPin className="w-4 h-4 text-amber-500" /> Pick Up Location <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="booking-pickUpLocation"
+                        type="text"
+                        placeholder="e.g. Roorkee Railway Station / Dehradun"
+                        {...register("pickUpLocation")}
+                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                      />
+                      {errors.pickUpLocation && (
+                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.pickUpLocation.message}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-dropOffLocation" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <Navigation className="w-4 h-4 text-amber-500" /> Drop Off Location <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="booking-dropOffLocation"
+                        type="text"
+                        placeholder="e.g. Delhi IGI Airport Terminal 3 / Haridwar"
+                        {...register("dropOffLocation")}
+                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                      />
+                      {errors.dropOffLocation && (
+                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.dropOffLocation.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Date & Time & Trip Schedule */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-pickupDate" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <Calendar className="w-4 h-4 text-amber-500" /> Pickup Date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="booking-pickupDate"
+                        type="date"
+                        {...register("pickupDate")}
+                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                      />
+                      {errors.pickupDate && (
+                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.pickupDate.message}</p>
+                      )}
+                    </div>
+
+                    <PickupTimeSelector
+                      value={watchValues.pickupTime}
+                      onChange={(val) => setValue("pickupTime", val, { shouldValidate: true })}
+                      error={errors.pickupTime?.message}
+                    />
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-tripSchedule" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                        Schedule Type
+                      </label>
+                      <select
+                        id="booking-tripSchedule"
+                        {...register("tripSchedule")}
+                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                      >
+                        <option value="One-Way">One-Way Trip</option>
+                        <option value="Round-Trip">Round-Trip Return</option>
+                        <option value="Local Hourly Package">Local Hourly Rental</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Step 1 Action Button */}
+                  <div className="pt-4 flex justify-end">
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="lg"
+                      onClick={goToStep2}
+                      className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-8 h-12 text-sm shadow-md cursor-pointer"
+                      iconRight={<ArrowRight className="w-4 h-4" />}
+                    >
+                      Next: Choose Vehicle
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* STEP 2: CHOOSE VEHICLE */}
+              {currentStep === 2 && (
+                <motion.div
+                  key="step2"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <div className="space-y-2">
+                    <h3 className="font-heading font-extrabold text-xl text-slate-900">
+                      Select Vehicle Fleet Class
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Choose the perfect vehicle for your passenger group & luggage requirements.
+                    </p>
+                  </div>
+
+                  {/* Vehicle Grid Cards */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {VEHICLE_OPTIONS.map((v) => {
+                      const isSelected = selectedVehicleName.includes(v.id);
+                      return (
+                        <div
+                          key={v.id}
+                          onClick={() => setValue("vehicleType", `${v.name} (${v.category})`)}
+                          className={cn(
+                            "relative p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 bg-white shadow-sm hover:shadow-md",
+                            isSelected
+                              ? "border-amber-400 bg-amber-50/40 ring-2 ring-amber-400/20"
+                              : "border-slate-200 hover:border-slate-300"
+                          )}
+                        >
+                          {/* Popular Tag */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-extrabold uppercase tracking-wide bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full shadow-xs">
+                              {v.popularTag}
+                            </span>
+                            <span className="font-extrabold text-slate-900 text-sm bg-slate-100 px-2.5 py-1 rounded-lg">
+                              {v.rate}
+                            </span>
+                          </div>
+
+                          {/* Image & Title */}
+                          <div className="flex items-center gap-4">
+                            <div className="relative w-24 h-16 bg-slate-100 rounded-xl overflow-hidden shrink-0 border">
+                              <Image
+                                src={v.image}
+                                alt={v.name}
+                                fill
+                                unoptimized
+                                className="object-cover"
+                              />
+                            </div>
+                            <div className="space-y-0.5">
+                              <h4 className="font-heading font-bold text-sm text-slate-900">
+                                {v.name}
+                              </h4>
+                              <p className="text-xs text-slate-500 font-medium">{v.category}</p>
+                              <div className="flex items-center gap-3 text-[11px] text-slate-600 font-semibold pt-1">
+                                <span className="flex items-center gap-1">
+                                  <Users className="w-3 h-3 text-amber-500" /> {v.capacity}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Briefcase className="w-3 h-3 text-amber-500" /> {v.luggage}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Selected Checkmark Indicator */}
+                          {isSelected && (
+                            <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-md border-2 border-white">
+                              <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Passengers & Luggage Controls */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-passengers" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                        Number of Passengers
+                      </label>
+                      <select
+                        id="booking-passengers"
+                        {...register("passengers")}
+                        className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                      >
+                        <option value="1">1 Passenger</option>
+                        <option value="2">2 Passengers</option>
+                        <option value="3">3 Passengers</option>
+                        <option value="4">4 Passengers</option>
+                        <option value="5">5 Passengers</option>
+                        <option value="6">6 Passengers</option>
+                        <option value="7">7 Passengers</option>
+                        <option value="8-12">8 - 12 Passengers (Group)</option>
+                        <option value="13-26">13 - 26 Passengers (Bus)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-luggage" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                        Luggage Count
+                      </label>
+                      <select
+                        id="booking-luggage"
+                        {...register("luggage")}
+                        className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                      >
+                        <option value="No Luggage">No Luggage</option>
+                        <option value="1-2 Bags">1 - 2 Bags</option>
+                        <option value="3-4 Bags">3 - 4 Bags</option>
+                        <option value="Heavy Luggage">Heavy Carrier Luggage</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Step 2 Action Buttons */}
+                  <div className="pt-4 flex items-center justify-between">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="lg"
+                      onClick={() => setCurrentStep(1)}
+                      className="px-6 h-12 text-sm cursor-pointer"
+                      iconLeft={<ArrowLeft className="w-4 h-4" />}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="lg"
+                      onClick={goToStep3}
+                      className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-8 h-12 text-sm shadow-md cursor-pointer"
+                      iconRight={<ArrowRight className="w-4 h-4" />}
+                    >
+                      Next: Rider Details
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* STEP 3: RIDER INFO & FINAL CONFIRMATION */}
+              {currentStep === 3 && (
+                <motion.div
+                  key="step3"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <div className="space-y-2">
+                    <h3 className="font-heading font-extrabold text-xl text-slate-900">
+                      Rider & Contact Details
+                    </h3>
+                    <p className="text-xs text-slate-500">
+                      Enter rider contact information for driver assignment & SMS updates.
+                    </p>
+                  </div>
+
+                  {/* Name & Mobile Number */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-customerName" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <User className="w-4 h-4 text-amber-500" /> Full Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        id="booking-customerName"
+                        type="text"
+                        placeholder="Enter full name"
+                        {...register("customerName")}
+                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                      />
+                      {errors.customerName && (
+                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.customerName.message}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-mobileNumber" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <Phone className="w-4 h-4 text-amber-500" /> Mobile Number <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-500">
+                          +91
+                        </span>
+                        <input
+                          id="booking-mobileNumber"
+                          type="tel"
+                          placeholder="10-digit mobile number"
+                          {...register("mobileNumber")}
+                          className="w-full h-12 pl-12 pr-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                        />
+                      </div>
+                      {errors.mobileNumber && (
+                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.mobileNumber.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Email & Promo Code */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-email" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                        <Mail className="w-4 h-4 text-amber-500" /> Email Address
+                      </label>
+                      <input
+                        id="booking-email"
+                        type="email"
+                        placeholder="Enter email address"
+                        {...register("email")}
+                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                      />
+                      {errors.email && (
+                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.email.message}</p>
+                      )}
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <label htmlFor="booking-promoCode" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                        Promo Code
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          id="booking-promoCode"
+                          type="text"
+                          placeholder="Enter promo code"
+                          {...register("promoCode")}
+                          className="flex-1 h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white uppercase font-bold tracking-wider"
+                        />
+                        <button
+                          type="button"
+                          onClick={handlePromoApply}
+                          className="px-4 h-12 rounded-xl bg-slate-900 text-amber-400 font-bold text-xs hover:bg-slate-800 transition-colors shrink-0 flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <Tag className="w-3.5 h-3.5" /> Apply
+                        </button>
+                      </div>
+                      {promoApplied && (
+                        <p className="text-xs font-bold text-emerald-600 mt-1">
+                          ✓ Promo Code Applied Successfully!
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="booking-message" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
+                      Special Instructions / Landmark (Optional)
+                    </label>
+                    <textarea
+                      id="booking-message"
+                      rows={2}
+                      placeholder="Any specific pickup point or flight number details..."
+                      {...register("message")}
+                      className="w-full p-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white resize-none"
+                    />
+                  </div>
+
+                  {/* Summary Card Preview */}
+                  <div className="p-5 bg-slate-950 text-white rounded-2xl border border-slate-800 space-y-3 shadow-lg">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                      <div className="flex items-center gap-2 text-xs font-extrabold text-amber-400 uppercase tracking-wide">
+                        <Car className="w-4 h-4" /> Trip Reservation Summary
+                      </div>
+                      <span className="text-xs font-bold bg-amber-400/20 text-amber-400 px-2.5 py-1 rounded-full border border-amber-400/30">
+                        {watchValues.tripSchedule}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                      <div>
+                        <span className="text-slate-400 block font-medium">Route:</span>
+                        <span className="font-bold text-white block truncate">
+                          {watchValues.pickUpLocation || "Roorkee"} ➔ {watchValues.dropOffLocation || "Delhi"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-medium">Date & Time:</span>
+                        <span className="font-bold text-white block">
+                          {watchValues.pickupDate} at {watchValues.pickupTime}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 block font-medium">Vehicle Class:</span>
+                        <span className="font-bold text-amber-400 block truncate">
+                          {selectedVehicleObj.name}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Step 3 Action Buttons */}
+                  <div className="pt-4 flex items-center justify-between">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="lg"
+                      onClick={() => setCurrentStep(2)}
+                      className="px-6 h-12 text-sm cursor-pointer"
+                      iconLeft={<ArrowLeft className="w-4 h-4" />}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      size="lg"
+                      isLoading={isSubmitting}
+                      className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-8 h-12 text-base shadow-xl shadow-amber-500/20 cursor-pointer"
+                      iconRight={<CheckCircle2 className="w-5 h-5 stroke-[2.5]" />}
+                    >
+                      Confirm & Lock Ride Now 🚖
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </form>
+        )}
+      </div>
+
+      {/* Trust Footer Badges */}
+      <div className="bg-slate-50 p-4 border-t border-slate-200 flex flex-wrap items-center justify-around gap-4 text-xs font-semibold text-slate-600">
+        <div className="flex items-center gap-1.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <span>100% Guaranteed Pickup</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <CheckCircle2 className="w-4 h-4 text-amber-600" />
+          <span>No Surge Charges</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Car className="w-4 h-4 text-blue-600" />
+          <span>Sanitized GPS Cabs</span>
+        </div>
+      </div>
+    </div>
   );
 };

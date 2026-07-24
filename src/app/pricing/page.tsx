@@ -40,7 +40,7 @@ export default function PricingPage() {
             <span>•</span>
             <span>Zero Hidden Charges</span>
             <span>•</span>
-            <span>24/7 Verified Chauffeurs</span>
+            <span>Verified Chauffeurs</span>
           </div>
         </Container>
       </section>

@@ -1,7 +1,7 @@
 export const SITE_CONFIG = {
   name: "QuickWay Ride",
   tagline: "Premium Taxi Booking & Travel Management Platform",
-  companyName: "QuickWay Ride Services Ltd.",
+  companyName: "QuickWay Ride",
   region: "Uttarakhand & Nearby Regions",
   contact: {
     phoneHotline: "+91 8679506655",
@@ -9,7 +9,8 @@ export const SITE_CONFIG = {
     whatsappNumber: "+91 8679506655",
     supportEmail: "info@quickwayride.com",
     emergencyPhone: "+91 8679506655",
-    officeAddress: "1st Floor, Opposite to Shiv Sani Mandir, Near Sai Lok Gate, GMS Road",
+    officeAddress: "1st Floor, Opposite to Shiv Sani Mandir, Near Sai Lok Gate, GMS Road, Dehradun",
+    cityAddress: "Roorkee & Dehradun, Uttarakhand, India",
     googleMapUrl: "https://maps.app.goo.gl/mESPwJUT69WaT6Pa6?g_st=awb",
     businessHours: "24 Hours / 7 Days a Week",
   },
@@ -18,6 +19,7 @@ export const SITE_CONFIG = {
     instagram: "https://instagram.com/quickwayride",
     twitter: "https://twitter.com/quickwayride",
     linkedin: "https://linkedin.com/company/quickwayride",
+    whatsapp: "https://wa.me/918679506655",
   },
   navLinks: [
     { label: "Home", href: "/" },
@@ -29,10 +31,17 @@ export const SITE_CONFIG = {
     { label: "Gallery", href: "/gallery" },
     { label: "Contact", href: "/contact" },
   ],
+  legalLinks: [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms & Conditions", href: "/terms" },
+    { label: "Cancellation Policy", href: "/cancellation-policy" },
+    { label: "Refund Policy", href: "/refund-policy" },
+  ],
   secondaryLinks: [
     { label: "Service Areas", href: "/service-areas" },
     { label: "Corporate Cabs", href: "/corporate" },
     { label: "Book Cabs", href: "/book" },
+    { label: "Request Quote", href: "/quote" },
   ],
   seoDefaults: {
     title: "QuickWay Ride - Premium Taxi & Outstation Cabs in Uttarakhand",

@@ -3,7 +3,7 @@ import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/providers";
 import { SITE_CONFIG } from "@/constants/siteConfig";
-import { Header } from "@/components/layout/Header";
+import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 
 const outfitFont = Outfit({
   subsets: ["latin"],
@@ -26,6 +26,10 @@ export const metadata: Metadata = {
   },
   description: SITE_CONFIG.seoDefaults.description,
   metadataBase: new URL(SITE_CONFIG.seoDefaults.url),
+  icons: {
+    icon: "/favicon.png",
+    apple: "/favicon.png",
+  },
   openGraph: {
     title: SITE_CONFIG.seoDefaults.title,
     description: SITE_CONFIG.seoDefaults.description,
@@ -58,10 +62,9 @@ export default function RootLayout({
       lang="en"
       className={`${outfitFont.variable} ${plusJakartaSansFont.variable}`}
     >
-      <body className="min-h-screen bg-white text-slate-900 antialiased selection:bg-amber-500 selection:text-slate-900">
+      <body className="min-h-screen bg-white text-slate-900 antialiased selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
         <AppProviders>
-          <Header />
-          {children}
+          <MainLayoutWrapper>{children}</MainLayoutWrapper>
         </AppProviders>
       </body>
     </html>

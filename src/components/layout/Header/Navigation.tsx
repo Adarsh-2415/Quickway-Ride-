@@ -14,7 +14,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className, onItemClick }
   return (
     <nav
       aria-label="Main Navigation"
-      className={cn("flex items-center gap-1 xl:gap-2", className)}
+      className={cn("flex items-center gap-0.5 lg:gap-1 xl:gap-2.5", className)}
     >
       {SITE_CONFIG.navLinks.map((link) => (
         <NavItem

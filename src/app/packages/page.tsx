@@ -37,7 +37,7 @@ const TOUR_PACKAGES = [
     title: "Char Dham Yatra Pilgrimage Circuit",
     duration: "10 Days / 9 Nights",
     route: "Yamunotri ➔ Gangotri ➔ Kedarnath ➔ Badrinath",
-    highlights: ["Dedicated Chauffeur & SUV", "Helicopter Sync Assistance", "24/7 Hill Driving Chauffeur"],
+    highlights: ["Dedicated Chauffeur & SUV", "Helicopter Sync Assistance", "Expert Hill Driving Chauffeur"],
   },
 ];
 

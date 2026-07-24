@@ -41,7 +41,7 @@ export const ServiceGuarantees: React.FC = () => {
 
           <FeatureCard
             icon={<Users className="w-6 h-6 text-amber-600" />}
-            title="24/7 Dispatch Desk"
+            title="Dispatch Support Desk"
             description="Dedicated customer support operations team in Roorkee & Dehradun available around the clock."
           />
         </Grid>

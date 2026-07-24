@@ -6,18 +6,19 @@ import { Container } from "@/components/layout/Container";
 import { HeroBookingWidget } from "./HeroBookingWidget";
 import { HeroTrustBadges } from "./HeroTrustBadges";
 import { RegionalCityTicker } from "./RegionalCityTicker";
+import { HeroBackgroundSlider } from "./hero";
 import { Button } from "@/components/buttons/Button";
 import { SITE_CONFIG } from "@/constants/siteConfig";
 
 export const HeroSection: React.FC = () => {
   return (
-    <div className="relative w-full hero-dark-bg overflow-hidden text-white pt-6 pb-0 select-none">
-      {/* Background Radial Glow Spotlight */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(245,158,11,0.18),rgba(255,255,255,0))]" />
-      <div className="absolute top-1/4 right-10 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative w-full overflow-hidden text-white pt-2 lg:pt-3 pb-0 select-none min-h-[580px] sm:min-h-[640px] flex flex-col justify-between">
+      {/* Cinematic Full-Width Background Slider & Overlays (z-0 to z-10) */}
+      <HeroBackgroundSlider />
 
-      <Container className="relative z-10 pt-4 pb-16 lg:py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      {/* Hero Core Content Container (z-20) */}
+      <Container className="relative z-20 pt-2 sm:pt-3 lg:pt-4 pb-12 lg:pb-16 flex-1 flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
           
           {/* Left Column: Brand Message, Value Propositions & Direct Touchpoints */}
           <div className="lg:col-span-6 space-y-6 text-left">
@@ -25,38 +26,37 @@ export const HeroSection: React.FC = () => {
             <HeroTrustBadges />
 
             {/* Main Headline */}
-            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white">
-              Always Safe. Always On Time. Ride Comfortably Across{" "}
+            <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white drop-shadow-md">
+              Always Safe. Always On Time. Ride Across{" "}
               <span className="text-amber-500 underline decoration-amber-500/40 decoration-4">
                 Uttarakhand.
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-xl">
-              Professional taxi & travel services connecting{" "}
-              <strong className="text-white font-semibold">Roorkee</strong>,{" "}
-              <strong className="text-white font-semibold">Haridwar</strong>,{" "}
-              <strong className="text-white font-semibold">Rishikesh</strong>,{" "}
-              <strong className="text-white font-semibold">Dehradun</strong>,{" "}
-              <strong className="text-white font-semibold">Saharanpur</strong> & Delhi Airport.
+            <p className="text-base sm:text-lg text-slate-200 leading-relaxed font-normal max-w-xl drop-shadow-sm">
+              Your trusted travel partner for{" "}
+              <strong className="text-white font-semibold">Airport Transfers</strong>,{" "}
+              <strong className="text-white font-semibold">Outstation Trips</strong>,{" "}
+              <strong className="text-white font-semibold">Local Travel</strong> &{" "}
+              <strong className="text-white font-semibold">Tour Packages</strong>. Book comfortable rides in just a click.
             </p>
 
-            {/* Key Value Points */}
+            {/* Key Value Points Badges */}
             <div className="grid grid-cols-2 gap-3 text-xs sm:text-sm text-slate-200 font-medium">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-slate-950/40 backdrop-blur-md p-2 rounded-lg border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>Verified Drivers & GPS Cabs</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-slate-950/40 backdrop-blur-md p-2 rounded-lg border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>Fixed Rates • No Surge Fee</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-slate-950/40 backdrop-blur-md p-2 rounded-lg border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>24/7 Guaranteed Pickup</span>
+                <span>Guaranteed On-Time Pickup</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 bg-slate-950/40 backdrop-blur-md p-2 rounded-lg border border-white/10">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>Clean & Sanitized Cabs</span>
               </div>
@@ -68,7 +68,7 @@ export const HeroSection: React.FC = () => {
                 <Button
                   variant="primary"
                   size="lg"
-                  className="font-bold text-slate-900 shadow-lg shadow-amber-500/20"
+                  className="font-bold text-slate-900 shadow-xl shadow-amber-500/20 bg-amber-400 hover:bg-amber-500 cursor-pointer"
                   iconLeft={<PhoneCall className="w-4 h-4 stroke-[2.5]" />}
                 >
                   Call {SITE_CONFIG.contact.phoneDisplay}
@@ -83,7 +83,7 @@ export const HeroSection: React.FC = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="bg-emerald-600/90 text-white border-emerald-500 hover:bg-emerald-700 shadow-md"
+                  className="bg-emerald-600/90 text-white border-emerald-500 hover:bg-emerald-700 shadow-md cursor-pointer"
                   iconLeft={<MessageSquare className="w-4 h-4" />}
                 >
                   WhatsApp Cabs
@@ -91,35 +91,45 @@ export const HeroSection: React.FC = () => {
               </a>
             </div>
 
-            {/* Fleet Status Card */}
-            <div className="pt-2 flex items-center gap-3.5 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 backdrop-blur-md max-w-md shadow-xl">
-              <div className="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg shrink-0 border border-amber-500/30">
-                🚖
+            {/* Social Proof Testimonial Pill */}
+            <div className="pt-1 flex items-center gap-3.5 p-3 rounded-xl bg-slate-950/60 border border-white/10 backdrop-blur-md max-w-md shadow-xl">
+              <div className="flex -space-x-2 shrink-0">
+                <div className="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-extrabold text-xs flex items-center justify-center border-2 border-slate-900">
+                  R
+                </div>
+                <div className="w-8 h-8 rounded-full bg-emerald-500 text-white font-extrabold text-xs flex items-center justify-center border-2 border-slate-900">
+                  A
+                </div>
+                <div className="w-8 h-8 rounded-full bg-blue-500 text-white font-extrabold text-xs flex items-center justify-center border-2 border-slate-900">
+                  V
+                </div>
               </div>
               <div className="space-y-0.5">
-                <span className="text-xs font-bold text-amber-400 uppercase tracking-wide block">
-                  Uttarakhand Fleet Active
+                <span className="text-xs font-bold text-white block">
+                  Trusted by 1,000+ Families, Students & Corporates
                 </span>
-                <p className="text-xs text-slate-300 leading-snug">
-                  Sedans, Executive SUVs (Innova Crysta) & Tempo Travellers ready 24/7.
-                </p>
+                <span className="text-[11px] text-amber-400 italic block font-medium">
+                  "Reliable, punctual rides across Uttarakhand"
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Embedded Instant Booking Engine Widget */}
-          <div className="lg:col-span-6">
+          {/* Right Column: Embedded Instant Booking Engine Widget (z-30) */}
+          <div className="lg:col-span-6 relative z-30">
             <HeroBookingWidget />
           </div>
 
         </div>
       </Container>
 
-      {/* Regional City Coverage Ticker */}
-      <RegionalCityTicker />
+      {/* Regional City Coverage Ticker (z-20) */}
+      <div className="relative z-20">
+        <RegionalCityTicker />
+      </div>
 
-      {/* Fluid SVG Wave Bottom Divider */}
-      <div className="relative w-full overflow-hidden leading-none z-10 bg-slate-950">
+      {/* Fluid SVG Wave Bottom Divider (z-20) */}
+      <div className="relative w-full overflow-hidden leading-none z-20 bg-slate-950">
         <svg
           className="relative block w-full h-8 sm:h-12 lg:h-16 text-white"
           viewBox="0 0 1200 120"

@@ -41,17 +41,17 @@ export const Header: React.FC = () => {
           isScrolled ? "shadow-md bg-white/95 backdrop-blur-md border-slate-200" : "shadow-none"
         )}
       >
-        <Container className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
-          {/* Logo Section */}
-          <Logo />
-
-          {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center">
-            <Navigation />
+        <Container className="flex items-center justify-between h-16 sm:h-18 lg:h-20 gap-4 sm:gap-6">
+          {/* Left Block: Logo + Navigation Links */}
+          <div className="flex items-center gap-2 lg:gap-3 xl:gap-6 min-w-0">
+            <Logo />
+            <div className="hidden lg:flex items-center min-w-0">
+              <Navigation />
+            </div>
           </div>
 
           {/* Right Action Area: CTAs */}
-          <div className="hidden sm:flex items-center">
+          <div className="hidden sm:flex items-center shrink-0 ml-auto">
             <CTAButtons />
           </div>
 

@@ -63,7 +63,7 @@ export const MissionVision: React.FC = () => {
                 <h3 className="font-heading font-bold text-xl text-slate-900">Our Mission</h3>
               </div>
               <p className="text-sm text-slate-700 leading-relaxed">
-                To offer safe, punctual, and transparent mobility services across Uttarakhand and North India. We aim to eliminate surge pricing stress by providing fixed rate cards, clean vehicles, and 24/7 dedicated customer assistance.
+                To offer safe, punctual, and transparent mobility services across Uttarakhand and North India. We aim to eliminate surge pricing stress by providing fixed rate cards, clean vehicles, and dedicated customer assistance.
               </p>
             </Card>
 

@@ -12,24 +12,26 @@ export interface CTAButtonsProps {
 
 export const CTAButtons: React.FC<CTAButtonsProps> = ({ className, isCompact = false }) => {
   return (
-    <div className={cn("flex items-center gap-3", className)}>
+    <div className={cn("flex items-center gap-2 xl:gap-3 shrink-0", className)}>
       {/* Secondary CTA: Call Now */}
-      <a href={`tel:${SITE_CONFIG.contact.phoneHotline}`} className="hidden sm:inline-flex">
+      <a href={`tel:${SITE_CONFIG.contact.phoneHotline}`} className="hidden sm:inline-flex shrink-0">
         <Button
           variant="outline"
           size={isCompact ? "sm" : "md"}
-          iconLeft={<PhoneCall className="w-4 h-4 text-amber-600" />}
+          className="px-3 xl:px-4 py-1.5 text-xs xl:text-sm font-semibold"
+          iconLeft={<PhoneCall className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-amber-600" />}
         >
           Call Now
         </Button>
       </a>
 
       {/* Primary CTA: Book Now */}
-      <Link href="/book">
+      <Link href="/book" className="shrink-0">
         <Button
           variant="primary"
           size={isCompact ? "sm" : "md"}
-          iconLeft={<Car className="w-4 h-4 stroke-[2.5]" />}
+          className="px-3.5 xl:px-4 py-1.5 text-xs xl:text-sm font-bold"
+          iconLeft={<Car className="w-3.5 h-3.5 xl:w-4 xl:h-4 stroke-[2.5]" />}
         >
           Book Now
         </Button>

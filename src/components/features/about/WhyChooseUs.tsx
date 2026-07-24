@@ -58,7 +58,7 @@ export const WhyChooseUs: React.FC = () => {
 
           <FeatureCard
             icon={<Users className="w-6 h-6 text-amber-600" />}
-            title="24/7 Dedicated Support Desk"
+            title="Dedicated Support Desk"
             description="Our customer care operations team in Roorkee & Dehradun is available around the clock to assist your journey."
           />
         </Grid>

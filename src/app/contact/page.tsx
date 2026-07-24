@@ -8,13 +8,13 @@ import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 
 export const metadata: Metadata = {
-  title: "Contact Us | QuickWay Ride - Dehradun HQ & 24/7 Support Desk",
+  title: "Contact Us | QuickWay Ride - Dehradun HQ & Support Desk",
   description:
     "Contact QuickWay Ride taxi services in Dehradun. Call 8679506655 or email info@quickwayride.com. Office: 1st Floor, Opposite to Shiv Sani Mandir, Near Sai Lok Gate, GMS Road, Dehradun.",
   openGraph: {
     title: "Contact Us | QuickWay Ride Taxi Services",
     description:
-      "Get in touch with QuickWay Ride in Dehradun. 24/7 Phone, WhatsApp & Email Support.",
+      "Get in touch with QuickWay Ride in Dehradun. Phone, WhatsApp & Email Support.",
   },
 };
 

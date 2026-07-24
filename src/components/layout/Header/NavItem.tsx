@@ -20,9 +20,9 @@ export const NavItem: React.FC<NavItemProps> = ({ label, href, onClick }) => {
       href={href}
       onClick={onClick}
       className={cn(
-        "relative px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-amber-500 select-none",
+        "relative px-1.5 lg:px-2 xl:px-3 py-1.5 sm:py-2 rounded-lg text-xs lg:text-[13px] xl:text-sm font-semibold transition-all duration-200 focus-visible:outline-amber-500 select-none whitespace-nowrap shrink-0",
         isActive
-          ? "text-amber-900 bg-amber-100/80 shadow-sm font-bold"
+          ? "text-amber-900 bg-amber-100/80 shadow-sm shadow-amber-200/50 font-bold"
           : "text-slate-700 hover:text-slate-900 hover:bg-slate-100/80"
       )}
     >

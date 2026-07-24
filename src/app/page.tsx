@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { HeroSection } from "@/components/features/home/HeroSection";
+import { TestimonialsSection } from "@/components/features/home/testimonials";
+import { FAQSection } from "@/components/features/home/faq";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Grid } from "@/components/layout/Grid";
@@ -9,8 +11,7 @@ import { SectionHeading } from "@/components/typography/Headings";
 import { BodyRegular } from "@/components/typography/Text";
 import { Button } from "@/components/buttons/Button";
 import { Badge } from "@/components/badges/Badge";
-import { ShieldCheck, Clock, Award, Users, ArrowRight, PhoneCall, Sparkles } from "lucide-react";
-import { SITE_CONFIG } from "@/constants/siteConfig";
+import { ShieldCheck, Clock, Award, Users, ArrowRight, Sparkles } from "lucide-react";
 
 export default function HomePage() {
   const featuredFleet = [
@@ -108,7 +109,7 @@ export default function HomePage() {
 
             <FeatureCard
               icon={<Users className="w-6 h-6 text-amber-600" />}
-              title="24/7 Live Support"
+              title="Live Support Desk"
               description="Dedicated operations desk in Roorkee & Dehradun available around the clock for trip assistance."
             />
           </Grid>
@@ -168,7 +169,10 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* 4. Popular Uttarakhand Tour Packages Preview */}
+      {/* 4. Customer Testimonials Section (CMS Ready) */}
+      <TestimonialsSection />
+
+      {/* 5. Popular Uttarakhand Tour Packages Preview */}
       <Section variant="default" padding="normal">
         <Container className="space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -203,37 +207,8 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* 5. Corporate & Wedding Travel Callout Banner */}
-      <Section variant="dark" padding="normal" className="relative">
-        <Container className="relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <Badge variant="softAccent" size="md">
-                Corporate & Event Logistics
-              </Badge>
-              <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight">
-                Need Monthly Corporate Cabs or Wedding Delegations?
-              </h2>
-              <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-                QuickWay Ride provides dedicated monthly fleet contracts for institutes, corporates in Saharanpur/Roorkee, and multi-vehicle delegations for wedding events.
-              </p>
-            </div>
-            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3 justify-end">
-              <Link href="/corporate">
-                <Button variant="primary" size="lg" className="w-full justify-center font-bold text-slate-900">
-                  Request Corporate Quote
-                </Button>
-              </Link>
-              <a href={`tel:${SITE_CONFIG.contact.phoneHotline}`}>
-                <Button variant="outline" size="lg" className="w-full justify-center bg-white/10 text-white border-white/20 hover:bg-white/20">
-                  <PhoneCall className="w-4 h-4 text-amber-400" />
-                  Call Operations Desk
-                </Button>
-              </a>
-            </div>
-          </div>
-        </Container>
-      </Section>
+      {/* 6. Frequently Asked Questions (FAQ) Section (CMS Ready) */}
+      <FAQSection />
     </main>
   );
 }

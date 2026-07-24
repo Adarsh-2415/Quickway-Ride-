@@ -30,7 +30,7 @@ export const ServicesHero: React.FC = () => {
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-            From 24/7 airport cabs and flat-rate outstation rides to Char Dham pilgrimage tours and corporate delegations—QuickWay Ride provides end-to-end travel excellence.
+            From airport cabs and flat-rate outstation rides to Char Dham pilgrimage tours and corporate delegations—QuickWay Ride provides end-to-end travel excellence.
           </p>
         </div>
       </Container>

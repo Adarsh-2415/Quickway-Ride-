@@ -9,7 +9,7 @@ import { ServicesCTA } from "@/components/features/services/ServicesCTA";
 export const metadata: Metadata = {
   title: "Services Offered | QuickWay Ride - Premium Taxi & Travel Platform",
   description:
-    "Explore 17+ verified taxi and travel services by QuickWay Ride. Outstation one-way cabs, 24/7 airport transfers, Char Dham Yatra, hill station tours, corporate delegations & Tempo Travellers across 26+ cities.",
+    "Explore 17+ verified taxi and travel services by QuickWay Ride. Outstation one-way cabs, airport transfers, Char Dham Yatra, hill station tours, corporate delegations & Tempo Travellers across 26+ cities.",
 };
 
 export default function ServicesPage() {
