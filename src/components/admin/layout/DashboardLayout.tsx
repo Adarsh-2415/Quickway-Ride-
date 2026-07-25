@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sidebar } from "./Sidebar";
 import { DashboardHeader } from "./DashboardHeader";
 
@@ -13,22 +13,42 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
   userEmail = "admin@quickwayride.com",
 }) => {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  // Restore sidebar state from localStorage on mount
+  useEffect(() => {
+    const savedState = localStorage.getItem("cms_sidebar_collapsed");
+    if (savedState !== null) {
+      setIsSidebarCollapsed(savedState === "true");
+    }
+  }, []);
+
+  const handleToggleSidebar = () => {
+    setIsSidebarCollapsed((prev) => {
+      const nextState = !prev;
+      localStorage.setItem("cms_sidebar_collapsed", String(nextState));
+      return nextState;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex selection:bg-amber-500 selection:text-slate-900">
-      {/* Admin Sidebar (280px Desktop Width & Mobile Drawer) */}
+      {/* Admin Sidebar (280px Expanded <-> 80px Collapsed) */}
       <Sidebar
         userEmail={userEmail}
+        isCollapsed={isSidebarCollapsed}
         isOpenMobile={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Right Core Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen transition-all duration-300">
         {/* Sticky Dashboard Header (72px Height) */}
         <DashboardHeader
           userEmail={userEmail}
+          isSidebarCollapsed={isSidebarCollapsed}
+          onToggleSidebar={handleToggleSidebar}
           onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
         />
 

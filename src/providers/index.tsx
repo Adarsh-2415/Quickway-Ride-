@@ -20,8 +20,10 @@ export function AppProviders({ children }: AppProvidersProps) {
               background: "#0F172A",
               color: "#FFFFFF",
               border: "1px solid #334155",
-              borderRadius: "10px",
+              borderRadius: "12px",
             },
+            className: "text-white font-extrabold text-xs shadow-2xl",
+            descriptionClassName: "!text-slate-200 font-medium text-xs pt-1 opacity-95 block",
           }}
         />
       </NuqsAdapter>

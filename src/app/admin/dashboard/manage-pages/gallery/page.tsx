@@ -1,0 +1,28 @@
+import React from "react";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { createServerClientInstance } from "@/lib/supabase/server";
+import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
+import { GalleryEditor } from "@/components/admin/pages/gallery/GalleryEditor";
+
+export const metadata: Metadata = {
+  title: "Gallery Page Editor | QuickWay Ride CMS",
+  description: "Manage fleet and tour gallery images with Draft to Publish workflow.",
+};
+
+export default async function GalleryEditorPage() {
+  const supabase = await createServerClientInstance();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/admin/login");
+  }
+
+  return (
+    <DashboardLayout userEmail={user.email || "admin@quickwayride.com"}>
+      <GalleryEditor />
+    </DashboardLayout>
+  );
+}

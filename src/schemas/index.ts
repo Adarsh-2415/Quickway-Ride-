@@ -1,13 +1,18 @@
 import { z } from "zod";
 
-export const phoneRegex = /^[6-9]\d{9}$/;
+// Robust 10-digit mobile phone schema that automatically cleans spaces, dashes, +91 prefixes, and extracts last 10 digits
+export const phoneSchema = z
+  .string()
+  .transform((val) => val.trim().replace(/\D/g, ""))
+  .transform((val) => (val.length > 10 ? val.slice(-10) : val))
+  .refine((val) => val.length === 10, {
+    message: "Please enter a valid 10-digit mobile number",
+  });
 
 // 1. Online Booking Engine Schema (14 Fields)
 export const bookingFormSchema = z.object({
   customerName: z.string().min(2, "Full name must be at least 2 characters"),
-  mobileNumber: z
-    .string()
-    .regex(phoneRegex, "Please enter a valid 10-digit Indian phone number (starting with 6-9)"),
+  mobileNumber: phoneSchema,
   email: z.string().email("Please enter a valid email address").or(z.literal("")),
   pickUpLocation: z.string().min(2, "Pick up location is required"),
   dropOffLocation: z.string().min(2, "Drop off location is required"),
@@ -25,9 +30,7 @@ export const bookingFormSchema = z.object({
 // 2. Contact Inquiry Form Schema
 export const contactFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  phone: z
-    .string()
-    .regex(phoneRegex, "Please enter a valid 10-digit Indian phone number"),
+  phone: phoneSchema,
   email: z.string().email("Please enter a valid email address"),
   service_type: z.string().min(1, "Please select a service type"),
   message: z.string().min(10, "Message must be at least 10 characters").max(1000),

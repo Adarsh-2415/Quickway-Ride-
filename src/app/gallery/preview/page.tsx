@@ -6,49 +6,46 @@ import { Section } from "@/components/layout/Section";
 import { Grid } from "@/components/layout/Grid";
 import { Card } from "@/components/cards/Card";
 import { fetchGalleryImagesAction } from "@/actions/gallery";
-import { Camera } from "lucide-react";
+import { Eye } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Fleet & Tour Gallery | QuickWay Ride Clean Taxi Fleet",
-  description:
-    "View clean interior and exterior photos of QuickWay Ride's fleet including Swift Dzire, Ertiga, Innova Crysta, and Tempo Travellers.",
+  title: "ADMIN PREVIEW | QuickWay Ride Gallery",
+  description: "Live Draft Preview for QuickWay Ride Gallery.",
 };
 
-export default async function GalleryPage() {
-  const res = await fetchGalleryImagesAction("published");
+export default async function GalleryPreviewPage() {
+  const res = await fetchGalleryImagesAction("all");
   const galleryItems = res.data || [];
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      {/* Hero Header */}
+    <main className="min-h-screen bg-slate-50 text-slate-900 select-none">
+      {/* Admin Preview Floating Ribbon */}
+      <div className="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-extrabold text-center uppercase tracking-wider flex items-center justify-center gap-2 shadow-md">
+        <Eye className="w-4 h-4" />
+        <span>ADMIN PREVIEW MODE — Displaying Draft & Published Images</span>
+      </div>
+
+      {/* Reusing exact Hero Header component styling */}
       <section className="bg-slate-950 py-16 text-white text-center border-b border-amber-500/20">
         <Container className="space-y-4 max-w-3xl mx-auto">
           <span className="text-xs font-bold text-amber-400 uppercase tracking-widest bg-amber-500/10 px-3.5 py-1.5 rounded-full border border-amber-500/30">
-            Real Vehicle Showcase
+            Preview Mode
           </span>
           <h1 className="font-heading font-extrabold text-3xl sm:text-5xl text-white">
-            QuickWay Ride Fleet Gallery
+            QuickWay Ride Gallery Preview
           </h1>
           <p className="text-slate-300 text-sm sm:text-base">
-            Sanitized, well-maintained vehicles ready for your outstation and city travels.
+            Review live appearance of uploaded draft photos before publishing.
           </p>
         </Container>
       </section>
 
-      {/* Live Gallery Grid fetched from Supabase */}
+      {/* Reusing exact Gallery Grid layout component */}
       <Section variant="default" padding="normal">
         <Container>
           {galleryItems.length === 0 ? (
-            <div className="text-center py-12 space-y-4">
-              <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center mx-auto">
-                <Camera className="w-8 h-8" />
-              </div>
-              <h2 className="font-heading font-extrabold text-2xl text-slate-900">
-                Gallery Updating Soon
-              </h2>
-              <p className="text-sm text-slate-500 max-w-md mx-auto font-medium">
-                New high-resolution fleet photos and tour highlights will be published here shortly.
-              </p>
+            <div className="p-16 text-center text-slate-500 font-bold text-sm">
+              No gallery images found in database.
             </div>
           ) : (
             <Grid cols={1} colsMd={2} colsLg={4} gap={6}>
@@ -57,12 +54,17 @@ export default async function GalleryPage() {
                   key={item.id}
                   variant="standard"
                   isHoverable
-                  className="p-0 overflow-hidden bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow"
+                  className="p-0 overflow-hidden bg-white border border-slate-200 rounded-2xl relative shadow-sm hover:shadow-md transition-shadow"
                 >
+                  {item.status === "draft" && (
+                    <span className="absolute top-3 left-3 z-10 bg-amber-500 text-slate-950 font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-full shadow-sm">
+                      Draft
+                    </span>
+                  )}
                   <div className="relative h-64 w-full bg-slate-100 p-2 flex items-center justify-center">
                     <Image
                       src={item.image_url}
-                      alt={item.title || "QuickWay Ride Gallery"}
+                      alt={item.title || "Gallery Preview"}
                       fill
                       className="object-contain p-2"
                       sizes="(max-width: 768px) 100vw, 25vw"

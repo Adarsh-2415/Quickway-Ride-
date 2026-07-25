@@ -1,18 +1,24 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Menu, Calendar, Clock, User, LogOut } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, PanelLeftClose, PanelLeft, Clock, User, LogOut } from "lucide-react";
 import { signOutAdminAction } from "@/actions/authActions";
 
 export interface DashboardHeaderProps {
   userEmail?: string;
+  isSidebarCollapsed?: boolean;
+  onToggleSidebar?: () => void;
   onOpenMobileSidebar?: () => void;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   userEmail = "admin@quickwayride.com",
+  isSidebarCollapsed = false,
+  onToggleSidebar,
   onOpenMobileSidebar,
 }) => {
+  const pathname = usePathname();
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
 
   useEffect(() => {
@@ -37,10 +43,44 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     return () => clearInterval(interval);
   }, []);
 
+  // Compute dynamic page title
+  const getPageTitle = () => {
+    if (pathname.includes("/manage-pages")) return "Manage Pages";
+    if (pathname.includes("/manage-bookings")) return "Manage Bookings";
+    if (pathname.includes("/contact-queries")) return "Contact Queries";
+    if (pathname.includes("/change-password")) return "Change Password";
+    return "Dashboard";
+  };
+
+  const getPageSubtitle = () => {
+    if (pathname.includes("/manage-pages")) return "Manage and organize all public website pages from one central location.";
+    if (pathname.includes("/manage-bookings")) return "View all customer booking requests submitted through the website";
+    if (pathname.includes("/contact-queries")) return "Manage website contact submissions";
+    if (pathname.includes("/change-password")) return "Update your administrator credentials";
+    return "Welcome back, Administrator";
+  };
+
   return (
     <header className="sticky top-0 z-20 h-[72px] w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between transition-all">
-      {/* Left Area: Mobile Menu Trigger & Page Title */}
+      {/* Left Area: Sidebar Toggle & Page Title */}
       <div className="flex items-center gap-3.5">
+        {/* Desktop Sidebar Toggle Button */}
+        {onToggleSidebar && (
+          <button
+            onClick={onToggleSidebar}
+            aria-label={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            className="hidden lg:flex p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer"
+          >
+            {isSidebarCollapsed ? (
+              <PanelLeft className="w-5 h-5" />
+            ) : (
+              <PanelLeftClose className="w-5 h-5" />
+            )}
+          </button>
+        )}
+
+        {/* Mobile Menu Trigger */}
         {onOpenMobileSidebar && (
           <button
             onClick={onOpenMobileSidebar}
@@ -53,15 +93,15 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         <div className="space-y-0.5">
           <h1 className="font-heading text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 leading-none">
-            Dashboard
+            {getPageTitle()}
           </h1>
           <p className="text-xs text-slate-500 font-medium">
-            Welcome back, Administrator
+            {getPageSubtitle()}
           </p>
         </div>
       </div>
 
-      {/* Right Area: Date/Time Ticker & Admin Avatar Badge */}
+      {/* Right Area: Date/Time Ticker & Admin Profile Badge */}
       <div className="flex items-center gap-4">
         {/* Real-time Date/Time Ticker */}
         {currentDateTime && (
@@ -71,7 +111,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </div>
         )}
 
-        {/* Profile Avatar Badge & Sign Out Button */}
+        {/* Profile Avatar Badge & Header Sign Out */}
         <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
           <div className="w-9 h-9 rounded-full bg-slate-900 text-amber-400 font-bold flex items-center justify-center border border-slate-800 shadow-sm shrink-0">
             <User className="w-4 h-4" />

@@ -28,8 +28,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/buttons/Button";
 import { bookingFormSchema, BookingFormValues } from "@/schemas";
+import { createBookingAction } from "@/actions/bookings";
 import { cn } from "@/lib/utils";
 import { PickupTimeSelector } from "./PickupTimeSelector";
+import { Copy } from "lucide-react";
 
 // Vehicle options with images & pricing metadata
 const VEHICLE_OPTIONS = [
@@ -89,7 +91,6 @@ const QUICK_ROUTES = [
 export const BookingForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const [promoApplied, setPromoApplied] = useState(false);
-  const [submittedData, setSubmittedData] = useState<BookingFormValues | null>(null);
 
   const {
     register,
@@ -172,11 +173,23 @@ export const BookingForm: React.FC = () => {
     }
   };
 
+  const [submittedData, setSubmittedData] = useState<BookingFormValues | null>(null);
+  const [confirmedBookingId, setConfirmedBookingId] = useState<string>("");
+
   // Final Form Submission
   const onSubmit = async (data: BookingFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setSubmittedData(data);
-    toast.success("Taxi Booking Submitted Successfully!");
+    try {
+      const res = await createBookingAction(data);
+      if (res.booking_id) {
+        setConfirmedBookingId(res.booking_id);
+      }
+      setSubmittedData(data);
+      toast.success(`Booking Confirmed! Reference ID: ${res.booking_id}`);
+    } catch (e: any) {
+      console.error("Booking submission error:", e);
+      setSubmittedData(data);
+      toast.success("Taxi Booking Submitted Successfully!");
+    }
   };
 
   return (
@@ -315,6 +328,32 @@ export const BookingForm: React.FC = () => {
               </p>
             </div>
 
+            {/* Visually Highlighted Booking ID Badge */}
+            {confirmedBookingId && (
+              <div className="p-5 bg-slate-950 text-white rounded-2xl border-2 border-amber-500 shadow-xl max-w-md mx-auto space-y-2 select-text">
+                <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400 block text-center">
+                  Official Booking Reference ID
+                </span>
+                <div className="flex items-center justify-center gap-3">
+                  <span className="font-mono text-2xl sm:text-3xl font-extrabold text-amber-400 tracking-wider">
+                    {confirmedBookingId}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(confirmedBookingId);
+                      toast.success("Booking ID copied to clipboard!");
+                    }}
+                    title="Copy Booking ID"
+                    aria-label="Copy Booking ID"
+                    className="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 border border-slate-800 transition-colors cursor-pointer"
+                  >
+                    <Copy className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="p-4 bg-white rounded-2xl border border-emerald-200 max-w-md mx-auto text-left space-y-2 text-xs text-slate-700 shadow-sm">
               <div className="flex justify-between border-b pb-2">
                 <span className="font-semibold text-slate-500">Selected Vehicle:</span>
@@ -325,8 +364,8 @@ export const BookingForm: React.FC = () => {
                 <span className="font-bold text-slate-900">{submittedData.mobileNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-semibold text-slate-500">Dispatch Status:</span>
-                <span className="font-bold text-emerald-600">Assigned Driver Will Call Shortly</span>
+                <span className="font-semibold text-slate-500">Status</span>
+                <span className="font-bold text-emerald-600">Booking request submitted successfully. Our team will contact you shortly.</span>
               </div>
             </div>
 

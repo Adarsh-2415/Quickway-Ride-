@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Card } from "@/components/cards/Card";
 import { Button } from "@/components/buttons/Button";
 import { contactFormSchema, ContactFormValues } from "@/schemas";
+import { submitContactEnquiryAction } from "@/actions/contactQueriesActions";
 
 export const ContactForm: React.FC = () => {
   const [submittedData, setSubmittedData] = useState<ContactFormValues | null>(null);
@@ -29,9 +30,20 @@ export const ContactForm: React.FC = () => {
   });
 
   const onSubmit = async (data: ContactFormValues) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const res = await submitContactEnquiryAction(data);
+      if (!res.success) {
+        console.warn("Contact form submission error:", res.error);
+        toast.error("Database Notice", {
+          description: res.error || "Could not save enquiry. Please run the Supabase SQL script.",
+        });
+      } else {
+        toast.success("Inquiry Sent Successfully! Our team will contact you shortly.");
+      }
+    } catch (e) {
+      console.warn("Contact submission exception:", e);
+    }
     setSubmittedData(data);
-    toast.success("Inquiry Sent Successfully! Our team will contact you shortly.");
   };
 
   return (
