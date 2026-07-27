@@ -10,18 +10,17 @@ export const metadata: Metadata = {
   description: "Manage fleet and tour gallery images with Draft to Publish workflow.",
 };
 
-export default async function GalleryEditorPage() {
-  const supabase = await createServerClientInstance();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+import { getCurrentUserRole } from "@/lib/auth/serverAuth";
 
-  if (!user) {
-    redirect("/admin/login");
+export default async function GalleryEditorPage() {
+  const { userId, email, role } = await getCurrentUserRole();
+
+  if (!userId || role !== "admin") {
+    redirect("/admin/dashboard");
   }
 
   return (
-    <DashboardLayout userEmail={user.email || "admin@quickwayride.com"}>
+    <DashboardLayout userEmail={email} userRole={role}>
       <GalleryEditor />
     </DashboardLayout>
   );

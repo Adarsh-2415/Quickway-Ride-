@@ -7,13 +7,15 @@ import { signOutAdminAction } from "@/actions/authActions";
 
 export interface DashboardHeaderProps {
   userEmail?: string;
+  userRole?: string;
   isSidebarCollapsed?: boolean;
   onToggleSidebar?: () => void;
   onOpenMobileSidebar?: () => void;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
-  userEmail = "admin@quickwayride.com",
+  userEmail = "",
+  userRole = "",
   isSidebarCollapsed = false,
   onToggleSidebar,
   onOpenMobileSidebar,
@@ -57,7 +59,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     if (pathname.includes("/manage-bookings")) return "View all customer booking requests submitted through the website";
     if (pathname.includes("/contact-queries")) return "Manage website contact submissions";
     if (pathname.includes("/change-password")) return "Update your administrator credentials";
-    return "Welcome back, Administrator";
+    return userRole === "client" ? "Welcome back, Client User" : "Welcome back, Administrator";
   };
 
   return (

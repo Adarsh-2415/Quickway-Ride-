@@ -15,23 +15,23 @@ export interface BreadcrumbProps {
 
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className }) => {
   return (
-    <nav aria-label="Breadcrumb" className={cn("flex items-center text-xs text-slate-500", className)}>
+    <nav aria-label="Breadcrumb" className={cn("flex items-center text-xs text-slate-300", className)}>
       <ol className="flex items-center space-x-2">
         <li>
-          <Link href="/" className="hover:text-amber-500 transition-colors flex items-center gap-1">
-            <Home className="w-3.5 h-3.5" />
+          <Link href="/" className="text-slate-300 hover:text-amber-400 transition-colors flex items-center gap-1">
+            <Home className="w-3.5 h-3.5 text-amber-400" />
             <span className="sr-only">Home</span>
           </Link>
         </li>
         {items.map((item, idx) => (
           <li key={idx} className="flex items-center space-x-2">
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             {item.href && idx < items.length - 1 ? (
-              <Link href={item.href} className="hover:text-amber-500 transition-colors">
+              <Link href={item.href} className="text-slate-300 hover:text-amber-400 transition-colors">
                 {item.label}
               </Link>
             ) : (
-              <span className="font-semibold text-slate-900">{item.label}</span>
+              <span className="font-extrabold text-white tracking-wide">{item.label}</span>
             )}
           </li>
         ))}

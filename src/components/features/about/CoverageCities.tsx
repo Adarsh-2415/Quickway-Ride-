@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Search, CheckCircle2 } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/layout/Section";
 import { Badge } from "@/components/badges/Badge";
@@ -39,12 +39,27 @@ const CITIES = [
   { name: "Ludhiana", state: "Punjab", region: "Industrial Hub" },
 ];
 
-export const CoverageCities: React.FC = () => {
+export interface CoverageCitiesProps {
+  content?: {
+    cities_badge?: string;
+    cities_heading?: string;
+    cities_subtext?: string;
+  } | null;
+}
+
+export const CoverageCities: React.FC<CoverageCitiesProps> = ({ content }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredCities = CITIES.filter((c) =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.state.toLowerCase().includes(searchQuery.toLowerCase())
+  const citiesBadge = content?.cities_badge || "Regional Coverage Network";
+  const citiesHeading = content?.cities_heading || "Serving 26+ Key Cities & Transit Hubs";
+  const citiesSubtext =
+    content?.cities_subtext ||
+    "Pickups & drop-offs across Uttarakhand, Himachal Pradesh, Punjab, Delhi NCR, Rajasthan, and Uttar Pradesh.";
+
+  const filteredCities = CITIES.filter(
+    (c) =>
+      c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      c.state.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -53,12 +68,10 @@ export const CoverageCities: React.FC = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-2 max-w-xl">
             <Badge variant="softSecondary" size="md">
-              Regional Coverage Network
+              {citiesBadge}
             </Badge>
-            <SectionHeading>Serving 26+ Key Cities & Transit Hubs</SectionHeading>
-            <BodyRegular className="text-slate-600">
-              Pickups & drop-offs across Uttarakhand, Himachal Pradesh, Punjab, Delhi NCR, Rajasthan, and Uttar Pradesh.
-            </BodyRegular>
+            <SectionHeading>{citiesHeading}</SectionHeading>
+            {citiesSubtext && <BodyRegular className="text-slate-600">{citiesSubtext}</BodyRegular>}
           </div>
 
           {/* Search Filter Input */}

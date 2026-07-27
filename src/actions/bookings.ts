@@ -3,6 +3,7 @@
 import { createServerClientInstance } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { bookingFormSchema, BookingFormValues } from "@/schemas";
+import { sendBookingNotificationEmails } from "@/services/emailService";
 
 export interface BookingRecord {
   id?: string;
@@ -113,10 +114,19 @@ export async function createBookingAction(formData: BookingFormValues) {
       return { success: false, booking_id: bookingId, error: error.message };
     }
 
+    const savedRecord = data ? data[0] : null;
+
+    // Trigger non-blocking Email Notifications (Admin alert + Customer confirmation)
+    if (savedRecord) {
+      sendBookingNotificationEmails(savedRecord).catch((emailErr) => {
+        console.error("[createBookingAction] Non-blocking email dispatch error:", emailErr);
+      });
+    }
+
     return {
       success: true,
       booking_id: bookingId,
-      data: data ? data[0] : null,
+      data: savedRecord,
     };
   } catch (err: any) {
     console.error("createBookingAction Error:", err);

@@ -18,21 +18,25 @@ const PAGES = [
     title: "Home",
     description: "Manage homepage content and sections.",
     icon: House,
+    href: "/admin/dashboard/manage-pages/home",
   },
   {
     title: "About Us",
     description: "Manage company information and brand story.",
     icon: Info,
+    href: "/admin/dashboard/manage-pages/about",
   },
   {
     title: "Services",
     description: "Manage all service content and descriptions.",
     icon: Briefcase,
+    href: "/admin/dashboard/manage-pages/services",
   },
   {
     title: "Fleet",
     description: "Manage fleet page content.",
     icon: Car,
+    href: "/admin/dashboard/manage-pages/fleet",
   },
   {
     title: "Pricing",
@@ -72,7 +76,7 @@ export const ManagePagesGrid: React.FC = () => {
         </p>
       </div>
 
-      {/* 7 Page Cards Responsive Grid */}
+      {/* Page Cards Responsive Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {PAGES.map((page) => (
           <PageCard

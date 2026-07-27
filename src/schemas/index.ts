@@ -13,7 +13,7 @@ export const phoneSchema = z
 export const bookingFormSchema = z.object({
   customerName: z.string().min(2, "Full name must be at least 2 characters"),
   mobileNumber: phoneSchema,
-  email: z.string().email("Please enter a valid email address").or(z.literal("")),
+  email: z.string().email("Please enter a valid email address"),
   pickUpLocation: z.string().min(2, "Pick up location is required"),
   dropOffLocation: z.string().min(2, "Drop off location is required"),
   pickupDate: z.string().min(1, "Pickup date is required"),

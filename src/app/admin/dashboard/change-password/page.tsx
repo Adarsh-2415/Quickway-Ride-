@@ -5,24 +5,25 @@ import { createServerClientInstance } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { ChangePasswordForm } from "@/components/admin/auth/ChangePasswordForm";
 
+import { getCurrentUserRole } from "@/lib/auth/serverAuth";
+
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Change Password | QuickWay Ride CMS",
   description: "Securely change QuickWay Ride administrator account password.",
 };
 
 export default async function ChangePasswordPage() {
-  const supabase = await createServerClientInstance();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { userId, email, role } = await getCurrentUserRole();
 
   // Server-side auth guard
-  if (!user) {
-    redirect("/admin/login");
+  if (!userId || !role) {
+    redirect("/admin/login?error=unauthorized_role");
   }
 
   return (
-    <DashboardLayout userEmail={user.email || "admin@quickwayride.com"}>
+    <DashboardLayout userEmail={email} userRole={role}>
       <ChangePasswordForm />
     </DashboardLayout>
   );

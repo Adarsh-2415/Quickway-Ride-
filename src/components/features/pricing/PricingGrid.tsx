@@ -108,7 +108,7 @@ export const PricingGrid: React.FC<PricingGridProps> = ({ mode = "public" }) => 
       {isLoading ? (
         <div className="py-12 text-center space-y-3">
           <Loader2 className="w-8 h-8 text-amber-600 animate-spin mx-auto" />
-          <p className="text-sm font-bold text-slate-600">Loading Official Fares from Supabase...</p>
+          <p className="text-sm font-bold text-slate-600">Loading Official Route Fares...</p>
         </div>
       ) : viewMode === "cards" ? (
         /* View Mode 1: Grid Cards View */
@@ -138,16 +138,43 @@ export const PricingGrid: React.FC<PricingGridProps> = ({ mode = "public" }) => 
                   )}
 
                   <div className="space-y-3">
-                    {/* Route Header */}
-                    <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-                      <MapPin className="w-4 h-4 text-amber-500 shrink-0" />
-                      <div>
-                        <span className="text-[11px] font-bold text-slate-500 uppercase block leading-none">
-                          {item.origin} ➔ Destination
-                        </span>
-                        <h3 className="font-heading font-extrabold text-lg text-slate-900 mt-0.5">
-                          {item.destination}
-                        </h3>
+                    {/* Option 1: Boarding Pass / Route Pill Path Header */}
+                    <div className="border-b border-slate-100 pb-3">
+                      <div className="flex items-center justify-between gap-1.5 bg-slate-50 border border-slate-200/80 p-2.5 rounded-xl shadow-2xs">
+                        {/* Origin Pill */}
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                          <div className="min-w-0">
+                            <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider block leading-none">
+                              FROM
+                            </span>
+                            <span className="font-heading font-extrabold text-xs text-slate-800 truncate block mt-0.5">
+                              {item.origin}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Connecting Path Arrow */}
+                        <div className="flex items-center gap-0.5 text-slate-400 shrink-0">
+                          <span className="h-[1px] w-3 bg-slate-300 sm:w-4" />
+                          <span className="text-[9px] font-black text-amber-600 bg-amber-100/80 px-1.5 py-0.5 rounded border border-amber-200 uppercase tracking-tight">
+                            ONE-WAY
+                          </span>
+                          <span className="h-[1px] w-3 bg-slate-300 sm:w-4" />
+                        </div>
+
+                        {/* Destination Pill */}
+                        <div className="flex items-center gap-1.5 text-right min-w-0 justify-end">
+                          <div className="min-w-0">
+                            <span className="text-[9px] font-extrabold text-amber-600 uppercase tracking-wider block leading-none">
+                              TO DROPOFF
+                            </span>
+                            <span className="font-heading font-extrabold text-xs sm:text-sm text-slate-900 truncate block mt-0.5">
+                              {item.destination}
+                            </span>
+                          </div>
+                          <MapPin className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        </div>
                       </div>
                     </div>
 

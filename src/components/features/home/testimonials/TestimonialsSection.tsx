@@ -6,14 +6,22 @@ import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { TESTIMONIALS_DATA } from "./testimonials.data";
 import { TestimonialCard } from "./TestimonialCard";
+import { Testimonial } from "./testimonials.types";
 import { cn } from "@/lib/utils";
 
-export const TestimonialsSection: React.FC = () => {
+export interface TestimonialsSectionProps {
+  testimonials?: Testimonial[];
+}
+
+export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [isPaused, setIsPaused] = useState(false);
 
-  const total = TESTIMONIALS_DATA.length;
+  const activeTestimonials =
+    testimonials && testimonials.length > 0 ? testimonials : TESTIMONIALS_DATA;
+
+  const total = activeTestimonials.length;
 
   const handleNext = useCallback(() => {
     setDirection(1);
@@ -32,12 +40,12 @@ export const TestimonialsSection: React.FC = () => {
 
   // Autoplay slider every 5000ms (pauses on hover)
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || total <= 1) return;
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
     return () => clearInterval(interval);
-  }, [isPaused, handleNext]);
+  }, [isPaused, handleNext, total]);
 
   // Keyboard navigation support
   useEffect(() => {
@@ -52,7 +60,7 @@ export const TestimonialsSection: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleNext, handlePrev]);
 
-  const currentTestimonial = TESTIMONIALS_DATA[currentIndex];
+  const currentTestimonial = activeTestimonials[currentIndex] || activeTestimonials[0];
 
   return (
     <section className="relative w-full bg-slate-950 text-white py-20 sm:py-28 overflow-hidden select-none">
@@ -86,25 +94,27 @@ export const TestimonialsSection: React.FC = () => {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={currentTestimonial.id}
-              initial={{ opacity: 0, x: direction * 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -direction * 40 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              className="w-full"
-            >
-              <TestimonialCard testimonial={currentTestimonial} />
-            </motion.div>
-          </AnimatePresence>
+          {currentTestimonial && (
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={currentTestimonial.id || currentIndex}
+                initial={{ opacity: 0, x: direction * 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -direction * 40 }}
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+                className="w-full"
+              >
+                <TestimonialCard testimonial={currentTestimonial} />
+              </motion.div>
+            </AnimatePresence>
+          )}
         </div>
 
         {/* Controls Section Below Card */}
         <div className="mt-10 flex flex-col items-center justify-center gap-6">
           {/* Pagination Dots */}
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80 border border-slate-800 shadow-lg backdrop-blur-md">
-            {TESTIMONIALS_DATA.map((_, idx) => {
+            {activeTestimonials.map((_, idx) => {
               const isActive = idx === currentIndex;
               return (
                 <button

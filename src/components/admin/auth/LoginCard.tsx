@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils";
 
 export const LoginCard: React.FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const hasUnauthorizedError = searchParams?.get("error") === "unauthorized_role";
   const [showPassword, setShowPassword] = useState(false);
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -70,14 +72,13 @@ export const LoginCard: React.FC = () => {
         password: data.password,
       });
 
-      toast.success("Welcome Back Admin!", {
+      toast.success("Welcome Back!", {
         description: "Session authenticated securely. Redirecting to dashboard...",
-        duration: 3000,
+        duration: 2000,
       });
 
-      // 3. Redirect to Admin Dashboard
-      router.push("/admin/dashboard");
-      router.refresh();
+      // 3. Perform hard redirect to clear auth params and ensure fresh middleware cookie load
+      window.location.href = "/admin/dashboard";
     } catch (err: unknown) {
       console.error("Login submission error:", err);
       toast.error("Security Error", {
@@ -122,6 +123,19 @@ export const LoginCard: React.FC = () => {
             Authorized personnel only. Enter your credentials to continue.
           </p>
         </div>
+
+        {/* Unauthorized Role Warning Alert */}
+        {hasUnauthorizedError && (
+          <div className="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs font-semibold text-rose-800 flex items-start gap-2.5 shadow-xs">
+            <ShieldAlert className="w-4.5 h-4.5 text-rose-600 shrink-0 mt-0.5" />
+            <div className="space-y-0.5">
+              <span className="font-bold block">Access Denied: Unassigned Role</span>
+              <span className="text-rose-700 font-normal block">
+                This account has not been assigned a CMS role in Supabase. Please contact your administrator.
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* Form Container */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left" noValidate>

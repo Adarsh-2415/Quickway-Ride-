@@ -10,18 +10,17 @@ export const metadata: Metadata = {
   description: "Manage tour packages shown on the public website with Draft to Publish workflow.",
 };
 
-export default async function TourPackagesEditorPage() {
-  const supabase = await createServerClientInstance();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+import { getCurrentUserRole } from "@/lib/auth/serverAuth";
 
-  if (!user) {
-    redirect("/admin/login");
+export default async function TourPackagesEditorPage() {
+  const { userId, email, role } = await getCurrentUserRole();
+
+  if (!userId || role !== "admin") {
+    redirect("/admin/dashboard");
   }
 
   return (
-    <DashboardLayout userEmail={user.email || "admin@quickwayride.com"}>
+    <DashboardLayout userEmail={email} userRole={role}>
       <TourPackagesEditor />
     </DashboardLayout>
   );

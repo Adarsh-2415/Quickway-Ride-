@@ -1,220 +1,156 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
-import { MapPin, Navigation, Calendar, Clock, Users, ArrowRight, Car, Plane, RefreshCw, Compass } from "lucide-react";
-import { Button } from "@/components/buttons/Button";
-import { TextInput } from "@/components/forms/TextInput";
-import { Select } from "@/components/forms/Select";
-import { TripType } from "@/types";
-import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import {
+  PhoneCall,
+  ArrowRight,
+  Ticket,
+  MessageSquare,
+  Sparkles,
+} from "lucide-react";
+import { SITE_CONFIG } from "@/constants/siteConfig";
 
 export const HeroBookingWidget: React.FC = () => {
   const router = useRouter();
 
-  const [tripType, setTripType] = useState<TripType>("outstation_oneway");
-  const [origin, setOrigin] = useState("Roorkee");
-  const [destination, setDestination] = useState("Dehradun");
-  const [pickupDate, setPickupDate] = useState(
-    new Date().toISOString().split("T")[0]
-  );
-  const [pickupTime, setPickupTime] = useState("09:00");
-  const [passengers, setPassengers] = useState("4");
-  const [rentalPackage, setRentalPackage] = useState("8hr_80km");
-
-  const cityPresets = ["Roorkee", "Haridwar", "Rishikesh", "Dehradun", "Saharanpur", "Delhi IGI Airport"];
-
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const params = new URLSearchParams({
-      trip: tripType,
-      from: origin,
-      to: destination,
-      date: pickupDate,
-      time: pickupTime,
-      passengers: passengers,
-      ...(tripType === "local_rental" ? { rentalPackage } : {}),
-    });
-    router.push(`/book?${params.toString()}`);
+  const handleProceedToBook = () => {
+    router.push("/book");
   };
 
   return (
-    <div className="w-full bg-white border border-slate-200/90 rounded-2xl shadow-xl overflow-hidden text-slate-900">
-      {/* Tab Header */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 bg-slate-100/80 p-1.5 border-b border-slate-200 gap-1 select-none">
-        <button
-          type="button"
-          onClick={() => {
-            setTripType("outstation_oneway");
-            if (destination === "") setDestination("Dehradun");
-          }}
-          className={cn(
-            "flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer",
-            tripType === "outstation_oneway"
-              ? "bg-slate-900 text-amber-400 shadow-sm"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-          )}
-        >
-          <Navigation className="w-3.5 h-3.5" />
-          <span>One-Way</span>
-        </button>
+    <div className="w-full bg-white border border-slate-200/90 rounded-3xl shadow-2xl overflow-hidden text-slate-900 select-none relative group">
+      {/* Top Gold Gradient Ticket Header */}
+      <div className="bg-slate-950 text-white p-5 sm:p-6 border-b border-slate-800 relative overflow-hidden">
+        {/* Radial Glow */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <button
-          type="button"
-          onClick={() => {
-            setTripType("outstation_roundtrip");
-            if (destination === "") setDestination("Haridwar");
-          }}
-          className={cn(
-            "flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer",
-            tripType === "outstation_roundtrip"
-              ? "bg-slate-900 text-amber-400 shadow-sm"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-          )}
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          <span>Round-Trip</span>
-        </button>
+        <div className="relative z-10 space-y-3">
+          {/* Ticket Header Badge */}
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-extrabold tracking-wide uppercase">
+              <Ticket className="w-3.5 h-3.5 fill-amber-400" />
+              <span>Taxi Booking Gateway</span>
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-full border border-slate-800">
+              Zero Advance Required
+            </span>
+          </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setTripType("local_rental");
-          }}
-          className={cn(
-            "flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer",
-            tripType === "local_rental"
-              ? "bg-slate-900 text-amber-400 shadow-sm"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-          )}
-        >
-          <Clock className="w-3.5 h-3.5" />
-          <span>Hourly Rental</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => {
-            setTripType("airport_transfer");
-            setDestination("Jolly Grant Dehradun Airport");
-          }}
-          className={cn(
-            "flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer",
-            tripType === "airport_transfer"
-              ? "bg-slate-900 text-amber-400 shadow-sm"
-              : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
-          )}
-        >
-          <Plane className="w-3.5 h-3.5" />
-          <span>Airport Cab</span>
-        </button>
+          <h3 className="font-heading text-xl sm:text-2xl font-extrabold text-white leading-tight">
+            Book Your Taxi in <span className="text-amber-400 underline decoration-amber-400/40">3 Easy Steps</span>
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
+            Submit your route request. Our admin team will call you shortly to confirm your journey & final fare quote.
+          </p>
+        </div>
       </div>
 
-      {/* Form Content */}
-      <form onSubmit={handleBookingSubmit} className="p-5 sm:p-6 space-y-4">
-        {/* City Presets Chips */}
-        <div className="space-y-1.5">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
-            Popular Quick Pickups:
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            {cityPresets.map((city) => (
-              <button
-                key={city}
-                type="button"
-                onClick={() => setOrigin(city)}
-                className={cn(
-                  "px-2.5 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer",
-                  origin === city
-                    ? "bg-amber-100 text-amber-900 border-amber-300 font-bold"
-                    : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
-                )}
-              >
-                {city}
-              </button>
-            ))}
+      {/* Main Ticket Content Area */}
+      <div className="p-5 sm:p-6 space-y-6 bg-slate-50/50">
+        {/* 3-Step Process Timeline Ribbon */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+          {/* Step 1 */}
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-amber-100 text-amber-900 font-extrabold text-[10px] flex items-center justify-center border border-amber-300">
+                1
+              </span>
+              <span className="font-heading font-extrabold text-xs text-slate-900">
+                Submit Request
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 font-medium pl-7">
+              Fill travel route in 60s
+            </p>
+          </div>
+
+          {/* Step 2: Highlighted Admin Call Confirmation */}
+          <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 shadow-2xs space-y-1 relative">
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 font-extrabold text-[10px] flex items-center justify-center">
+                2
+              </span>
+              <span className="font-heading font-extrabold text-xs text-amber-950 flex items-center gap-1">
+                <PhoneCall className="w-3 h-3 text-amber-600 animate-pulse" />
+                <span>Admin Calls You</span>
+              </span>
+            </div>
+            <p className="text-[11px] text-amber-900 font-semibold pl-7">
+              Fast phone/WA confirmation
+            </p>
+          </div>
+
+          {/* Step 3 */}
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-900 font-extrabold text-[10px] flex items-center justify-center border border-emerald-300">
+                3
+              </span>
+              <span className="font-heading font-extrabold text-xs text-slate-900">
+                Punctual Pickup
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 font-medium pl-7">
+              Clean cab at your doorstep
+            </p>
           </div>
         </div>
 
-        {/* Pickup & Destination Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <TextInput
-            label="Pickup Location"
-            value={origin}
-            onChange={(e) => setOrigin(e.target.value)}
-            iconLeft={<MapPin className="w-4 h-4 text-amber-500" />}
-            placeholder="e.g. Roorkee Railway Station"
-            required
-          />
+        {/* Primary Call to Action Button with Blinking Pulse Glow Effect */}
+        <div className="space-y-4 pt-2">
+          <motion.div
+            animate={{
+              scale: [1, 1.02, 1],
+              boxShadow: [
+                "0 10px 25px -5px rgba(245, 158, 11, 0.4)",
+                "0 20px 35px -5px rgba(245, 158, 11, 0.7)",
+                "0 10px 25px -5px rgba(245, 158, 11, 0.4)",
+              ],
+            }}
+            transition={{
+              duration: 1.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="rounded-2xl overflow-hidden"
+          >
+            <button
+              type="button"
+              onClick={handleProceedToBook}
+              className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 active:scale-[0.99] text-slate-950 font-extrabold text-base sm:text-lg tracking-wide flex items-center justify-center gap-3 transition-all cursor-pointer border border-amber-300/60"
+            >
+              <Sparkles className="w-5 h-5 fill-slate-950 text-slate-950 animate-spin" style={{ animationDuration: "4s" }} />
+              <span>Proceed to Taxi Booking Page</span>
+              <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+            </button>
+          </motion.div>
 
-          {tripType !== "local_rental" ? (
-            <TextInput
-              label="Drop Location"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
-              iconLeft={<Compass className="w-4 h-4 text-blue-600" />}
-              placeholder="e.g. Dehradun City / Airport"
-              required
-            />
-          ) : (
-            <Select
-              label="Rental Package"
-              value={rentalPackage}
-              onChange={(e) => setRentalPackage(e.target.value)}
-              options={[
-                { label: "4 Hours / 40 KM", value: "4hr_40km" },
-                { label: "8 Hours / 80 KM (Standard Day)", value: "8hr_80km" },
-                { label: "12 Hours / 120 KM (Full Day)", value: "12hr_120km" },
-              ]}
-            />
-          )}
+          {/* Hotline Contact Fallback Bar */}
+          <div className="flex items-center justify-between gap-4 text-xs text-slate-600 pt-3 border-t border-slate-200/80 flex-wrap">
+            <a
+              href={`tel:${SITE_CONFIG.contact.phoneHotline}`}
+              className="font-bold text-slate-800 hover:text-amber-600 inline-flex items-center gap-1.5"
+            >
+              <PhoneCall className="w-3.5 h-3.5 text-amber-500" />
+              <span>Call Desk: {SITE_CONFIG.contact.phoneDisplay}</span>
+            </a>
+
+            <span className="text-slate-300">•</span>
+
+            <a
+              href={`https://wa.me/${SITE_CONFIG.contact.whatsappNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent("Hi QuickWay Ride, I want to inquire about a taxi booking.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-emerald-700 hover:text-emerald-800 inline-flex items-center gap-1.5"
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+              <span>WhatsApp Inquiry</span>
+            </a>
+          </div>
         </div>
-
-        {/* Date, Time & Passengers */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <TextInput
-            label="Pickup Date"
-            type="date"
-            value={pickupDate}
-            onChange={(e) => setPickupDate(e.target.value)}
-            iconLeft={<Calendar className="w-4 h-4 text-slate-400" />}
-            required
-          />
-
-          <TextInput
-            label="Pickup Time"
-            type="time"
-            value={pickupTime}
-            onChange={(e) => setPickupTime(e.target.value)}
-            iconLeft={<Clock className="w-4 h-4 text-slate-400" />}
-            required
-          />
-
-          <Select
-            label="Passengers"
-            value={passengers}
-            onChange={(e) => setPassengers(e.target.value)}
-            options={[
-              { label: "1 - 4 Passengers (Sedan)", value: "4" },
-              { label: "5 - 7 Passengers (SUV / Innova)", value: "7" },
-              { label: "8 - 12 Passengers (Tempo Traveller)", value: "12" },
-              { label: "13+ Large Group Delegation", value: "20" },
-            ]}
-          />
-        </div>
-
-        {/* Submit Action CTA Button */}
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          className="w-full justify-center text-slate-900 font-bold uppercase tracking-wider text-sm shadow-md"
-          iconLeft={<Car className="w-5 h-5 stroke-[2.5]" />}
-          iconRight={<ArrowRight className="w-4 h-4" />}
-        >
-          Calculate Fare & Select Vehicle
-        </Button>
-      </form>
+      </div>
     </div>
   );
 };

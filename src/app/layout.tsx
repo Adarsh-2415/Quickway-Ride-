@@ -52,6 +52,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { WhatsAppFloatingButton } from "@/components/common/WhatsAppFloatingButton";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,6 +67,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-white text-slate-900 antialiased selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
         <AppProviders>
           <MainLayoutWrapper>{children}</MainLayoutWrapper>
+          <WhatsAppFloatingButton />
         </AppProviders>
       </body>
     </html>

@@ -10,16 +10,20 @@ import { HeroBackgroundSlider } from "./hero";
 import { Button } from "@/components/buttons/Button";
 import { SITE_CONFIG } from "@/constants/siteConfig";
 
-export const HeroSection: React.FC = () => {
+export interface HeroSectionProps {
+  slides?: any[];
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ slides }) => {
   return (
     <div className="relative w-full overflow-hidden text-white pt-2 lg:pt-3 pb-0 select-none min-h-[580px] sm:min-h-[640px] flex flex-col justify-between">
       {/* Cinematic Full-Width Background Slider & Overlays (z-0 to z-10) */}
-      <HeroBackgroundSlider />
+      <HeroBackgroundSlider slides={slides} />
 
       {/* Hero Core Content Container (z-20) */}
       <Container className="relative z-20 pt-2 sm:pt-3 lg:pt-4 pb-12 lg:pb-16 flex-1 flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
-          
+
           {/* Left Column: Brand Message, Value Propositions & Direct Touchpoints */}
           <div className="lg:col-span-6 space-y-6 text-left">
             {/* Trust Proof Badges */}
@@ -86,7 +90,7 @@ export const HeroSection: React.FC = () => {
                   className="bg-emerald-600/90 text-white border-emerald-500 hover:bg-emerald-700 shadow-md cursor-pointer"
                   iconLeft={<MessageSquare className="w-4 h-4" />}
                 >
-                  WhatsApp Cabs
+                  WhatsApp Support
                 </Button>
               </a>
             </div>

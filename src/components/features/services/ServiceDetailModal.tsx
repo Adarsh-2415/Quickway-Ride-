@@ -54,21 +54,13 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({ service,
             {service.longDescription || service.description}
           </p>
 
-          {/* Vehicle & Pricing Badge Box */}
-          <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-amber-50/60 border border-amber-200/80">
-            <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase block">Recommended Fleet</span>
-              <span className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
-                <Car className="w-4 h-4 text-amber-600" />
-                {service.recommendedVehicle}
-              </span>
-            </div>
-            <div>
-              <span className="text-[11px] font-bold text-slate-500 uppercase block">Rate Estimate</span>
-              <span className="text-sm font-extrabold text-amber-600 mt-0.5 block">
-                {service.rateHint}
-              </span>
-            </div>
+          {/* Vehicle Box */}
+          <div className="p-4 rounded-xl bg-amber-50/60 border border-amber-200/80">
+            <span className="text-[11px] font-bold text-slate-500 uppercase block">Recommended Fleet</span>
+            <span className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
+              <Car className="w-4 h-4 text-amber-600" />
+              {service.recommendedVehicle}
+            </span>
           </div>
 
           {/* Service Inclusions Checklist */}

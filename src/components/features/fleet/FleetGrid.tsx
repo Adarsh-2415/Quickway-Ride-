@@ -96,9 +96,15 @@ const FLEET_ROSTER: FleetVehicle[] = [
   },
 ];
 
-export const FleetGrid: React.FC = () => {
+export interface FleetGridProps {
+  vehicles?: FleetVehicle[];
+}
+
+export const FleetGrid: React.FC<FleetGridProps> = ({ vehicles }) => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [activeModalVehicle, setActiveModalVehicle] = useState<FleetVehicle | null>(null);
+
+  const fleetList = vehicles && vehicles.length > 0 ? vehicles : FLEET_ROSTER;
 
   const categories = [
     { id: "all", label: "All Vehicles" },
@@ -108,7 +114,7 @@ export const FleetGrid: React.FC = () => {
     { id: "traveller", label: "Urbania & Traveller (12-26)" },
   ];
 
-  const filtered = FLEET_ROSTER.filter(
+  const filtered = fleetList.filter(
     (v) => selectedTab === "all" || v.tabCategory === selectedTab
   );
 

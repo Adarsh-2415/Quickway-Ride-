@@ -7,16 +7,36 @@ import { HeroOverlay } from "./HeroOverlay";
 import { HeroDots } from "./HeroDots";
 import { HeroArrows } from "./HeroArrows";
 
-export const HeroBackgroundSlider: React.FC = () => {
+export interface HeroBackgroundSliderProps {
+  slides?: {
+    id: string;
+    image_url?: string;
+    image?: string;
+    title?: string;
+    alt?: string;
+  }[];
+}
+
+export const HeroBackgroundSlider: React.FC<HeroBackgroundSliderProps> = ({ slides }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const formattedSlides =
+    slides && slides.length > 0
+      ? slides.map((s, idx) => ({
+          id: s.id || `slide-${idx}`,
+          image: s.image_url || s.image || "/images/innova crysta.jfif",
+          title: s.title || "QuickWay Ride",
+          alt: s.alt || s.title || "QuickWay Ride",
+        }))
+      : HERO_SLIDES;
+
   const handleNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % HERO_SLIDES.length);
-  }, []);
+    setCurrentIndex((prev) => (prev + 1) % formattedSlides.length);
+  }, [formattedSlides.length]);
 
   const handlePrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  }, []);
+    setCurrentIndex((prev) => (prev - 1 + formattedSlides.length) % formattedSlides.length);
+  }, [formattedSlides.length]);
 
   // Auto-play interval: 5000ms
   useEffect(() => {
@@ -29,7 +49,7 @@ export const HeroBackgroundSlider: React.FC = () => {
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden select-none pointer-events-none">
       {/* Background Slides */}
-      {HERO_SLIDES.map((slide, idx) => (
+      {formattedSlides.map((slide, idx) => (
         <HeroSlide
           key={slide.id}
           slide={slide}
@@ -45,7 +65,7 @@ export const HeroBackgroundSlider: React.FC = () => {
       <div className="pointer-events-auto">
         <HeroArrows onPrev={handlePrev} onNext={handleNext} />
         <HeroDots
-          total={HERO_SLIDES.length}
+          total={formattedSlides.length}
           current={currentIndex}
           onSelect={(index) => setCurrentIndex(index)}
         />

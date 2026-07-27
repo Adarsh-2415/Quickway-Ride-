@@ -318,19 +318,49 @@ const ALL_SERVICES: (ServiceItem & { icon: React.ReactNode; tabCategory: string 
   },
 ];
 
-export const ServicesGrid: React.FC = () => {
+export interface ServicesGridProps {
+  services?: any[];
+}
+
+export const ServicesGrid: React.FC<ServicesGridProps> = ({ services }) => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [activeModalService, setActiveModalService] = useState<ServiceItem | null>(null);
 
+  const ICON_MAP: Record<string, React.ReactNode> = {
+    Plane: <Plane className="w-6 h-6 text-amber-500" />,
+    Car: <Car className="w-6 h-6 text-amber-500" />,
+    Clock: <Clock className="w-6 h-6 text-amber-500" />,
+    Train: <Train className="w-6 h-6 text-amber-500" />,
+    Hotel: <Hotel className="w-6 h-6 text-amber-500" />,
+    Mountain: <Mountain className="w-6 h-6 text-amber-500" />,
+    Sun: <Sun className="w-6 h-6 text-amber-500" />,
+    Compass: <Compass className="w-6 h-6 text-amber-500" />,
+    MapPin: <MapPin className="w-6 h-6 text-amber-500" />,
+    Bus: <Bus className="w-6 h-6 text-amber-500" />,
+    Building2: <Building2 className="w-6 h-6 text-amber-500" />,
+    Calendar: <Calendar className="w-6 h-6 text-amber-500" />,
+  };
+
+  const servicesList = services && services.length > 0
+    ? services.map((s) => ({
+        ...s,
+        longDescription: s.long_description || s.longDescription || s.description,
+        rateHint: s.rate_hint || s.rateHint,
+        recommendedVehicle: s.recommended_vehicle || s.recommendedVehicle,
+        tabCategory: s.tab_category || s.tabCategory || "outstation",
+        icon: ICON_MAP[s.icon_name || s.iconName] || <Car className="w-6 h-6 text-amber-500" />,
+      }))
+    : ALL_SERVICES;
+
   const categories = [
-    { id: "all", label: "All Services (17)" },
+    { id: "all", label: `All Services (${servicesList.length})` },
     { id: "outstation", label: "Outstation & Intercity" },
     { id: "airport", label: "Airport & Station Sync" },
     { id: "tours", label: "Tours & Pilgrimage" },
     { id: "corporate", label: "Corporate & Group" },
   ];
 
-  const filteredServices = ALL_SERVICES.filter(
+  const filteredServices = servicesList.filter(
     (s) => selectedTab === "all" || s.tabCategory === selectedTab
   );
 
@@ -380,9 +410,6 @@ export const ServicesGrid: React.FC = () => {
                       <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
                         {service.icon}
                       </div>
-                      <Badge variant="softAccent" size="sm">
-                        {service.badge}
-                      </Badge>
                     </div>
 
                     <h3 className="font-heading font-bold text-xl text-slate-900 leading-snug">
@@ -394,12 +421,7 @@ export const ServicesGrid: React.FC = () => {
                     </BodyRegular>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-100 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
-                      <span className="text-slate-400 font-medium">Estimated Fare:</span>
-                      <span className="text-amber-600 font-extrabold">{service.rateHint}</span>
-                    </div>
-
+                  <div className="pt-4 border-t border-slate-100">
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"

@@ -7,11 +7,13 @@ import { DashboardHeader } from "./DashboardHeader";
 export interface DashboardLayoutProps {
   children: React.ReactNode;
   userEmail?: string;
+  userRole?: string;
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children,
-  userEmail = "admin@quickwayride.com",
+  userEmail = "",
+  userRole = "",
 }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -37,6 +39,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       {/* Admin Sidebar (280px Expanded <-> 80px Collapsed) */}
       <Sidebar
         userEmail={userEmail}
+        userRole={userRole}
         isCollapsed={isSidebarCollapsed}
         isOpenMobile={isMobileSidebarOpen}
         onCloseMobile={() => setIsMobileSidebarOpen(false)}
@@ -47,6 +50,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         {/* Sticky Dashboard Header (72px Height) */}
         <DashboardHeader
           userEmail={userEmail}
+          userRole={userRole}
           isSidebarCollapsed={isSidebarCollapsed}
           onToggleSidebar={handleToggleSidebar}
           onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}

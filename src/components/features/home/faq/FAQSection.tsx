@@ -8,9 +8,16 @@ import { FAQHeader } from "./FAQHeader";
 import { FAQAccordion } from "./FAQAccordion";
 import { FAQCTA } from "./FAQCTA";
 import { FAQ_ITEMS } from "./faq.data";
+import { FAQItem } from "./faq.types";
 import { ShieldCheck, Clock, CheckCircle2 } from "lucide-react";
 
-export const FAQSection: React.FC = () => {
+export interface FAQSectionProps {
+  faqs?: FAQItem[];
+}
+
+export const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
+  const activeFaqs = faqs && faqs.length > 0 ? faqs : FAQ_ITEMS;
+
   return (
     <Section variant="default" padding="normal" className="bg-white">
       <Container className="space-y-12">
@@ -58,7 +65,7 @@ export const FAQSection: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.3 }}
             >
-              <FAQAccordion items={FAQ_ITEMS} />
+              <FAQAccordion items={activeFaqs} />
             </motion.div>
           </div>
         </div>

@@ -13,69 +13,81 @@ import { BodyRegular } from "@/components/typography/Text";
 import { Card } from "@/components/cards/Card";
 import { Button } from "@/components/buttons/Button";
 
-export const AboutFleetGrid: React.FC = () => {
-  const fleetCategories = [
-    {
-      name: "Sedan Category",
-      models: "Swift Dzire, Hyundai Aura",
-      categoryBadge: "Sedan",
-      seating: "4+1 Seater",
-      luggage: "2 Medium, 1 Cabin, 1 Backpack",
-      ac: "AC (Only in Plains)",
-      fuel: "Petrol, Petrol+CNG",
-      image: "/images/swift.jfif",
-      tag: "Popular Outstation",
-    },
-    {
-      name: "Ertiga Category",
-      models: "Maruti Ertiga, Toyota Rumion",
-      categoryBadge: "Ertiga",
-      seating: "6+1 Seater",
-      luggage: "3 Medium, 1 Cabin, 1 Backpack",
-      ac: "AC (Only in Plains)",
-      fuel: "Petrol, Petrol+CNG, Diesel",
-      image: "/images/ertiga.jfif",
-      tag: "Family Favorite",
-    },
-    {
-      name: "Innova Category",
-      models: "Toyota Innova Crysta, Innova Hycross",
-      categoryBadge: "Innova",
-      seating: "6+1, 7+1 Seater",
-      luggage: "3 Large, 1 Medium, 1 Backpack",
-      ac: "Dual Executive AC",
-      fuel: "Diesel",
-      image: "/images/innova crysta.jfif",
-      tag: "Premium Luxury",
-    },
-    {
-      name: "Urbania & Maharaja Category",
-      models: "Force Urbania, Maharaja Tempo Traveller",
-      categoryBadge: "Urbania / Maharaja",
-      seating: "12 - 26 Seater",
-      luggage: "Large Carrier & Dedicated Boot",
-      ac: "Executive Dual AC",
-      fuel: "Diesel",
-      image: "/images/Tempo Traveller.jfif",
-      tag: "Group Delegation",
-    },
-  ];
+const FLEET_CATEGORIES = [
+  {
+    name: "Sedan Category",
+    models: "Swift Dzire, Hyundai Aura",
+    categoryBadge: "Sedan",
+    seating: "4+1 Seater",
+    luggage: "2 Medium, 1 Cabin, 1 Backpack",
+    ac: "AC (Only in Plains)",
+    fuel: "Petrol, Petrol+CNG",
+    image: "/images/swift.jfif",
+    tag: "Popular Outstation",
+  },
+  {
+    name: "Ertiga Category",
+    models: "Maruti Ertiga, Toyota Rumion",
+    categoryBadge: "Ertiga",
+    seating: "6+1 Seater",
+    luggage: "3 Medium, 1 Cabin, 1 Backpack",
+    ac: "AC (Only in Plains)",
+    fuel: "Petrol, Petrol+CNG, Diesel",
+    image: "/images/ertiga.jfif",
+    tag: "Family Favorite",
+  },
+  {
+    name: "Innova Category",
+    models: "Toyota Innova Crysta, Innova Hycross",
+    categoryBadge: "Innova",
+    seating: "6+1, 7+1 Seater",
+    luggage: "3 Large, 1 Medium, 1 Backpack",
+    ac: "Dual Executive AC",
+    fuel: "Diesel",
+    image: "/images/innova crysta.jfif",
+    tag: "Premium Luxury",
+  },
+  {
+    name: "Urbania & Maharaja Category",
+    models: "Force Urbania, Maharaja Tempo Traveller",
+    categoryBadge: "Urbania / Maharaja",
+    seating: "12 - 26 Seater",
+    luggage: "Large Carrier & Dedicated Boot",
+    ac: "Executive Dual AC",
+    fuel: "Diesel",
+    image: "/images/Tempo Traveller.jfif",
+    tag: "Group Delegation",
+  },
+];
+
+export interface AboutFleetGridProps {
+  content?: {
+    fleet_badge?: string;
+    fleet_heading?: string;
+    fleet_subtext?: string;
+  } | null;
+}
+
+export const AboutFleetGrid: React.FC<AboutFleetGridProps> = ({ content }) => {
+  const fleetBadge = content?.fleet_badge || "Verified Fleet Roster";
+  const fleetHeading = content?.fleet_heading || "Our 4+ Premium Fleet Vehicles";
+  const fleetSubtext =
+    content?.fleet_subtext ||
+    "Every vehicle in our fleet is maintained to executive standards with daily sanitization and GPS tracking.";
 
   return (
     <Section variant="soft" padding="normal">
       <Container className="space-y-12">
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <Badge variant="softAccent" size="md">
-            Verified Fleet Roster
+            {fleetBadge}
           </Badge>
-          <SectionHeading>Our 6+ Premium Fleet Vehicles</SectionHeading>
-          <BodyRegular className="text-slate-600">
-            Every vehicle in our fleet is maintained to executive standards with daily sanitization and GPS tracking.
-          </BodyRegular>
+          <SectionHeading>{fleetHeading}</SectionHeading>
+          {fleetSubtext && <BodyRegular className="text-slate-600">{fleetSubtext}</BodyRegular>}
         </div>
 
         <Grid cols={1} colsMd={2} gap={6}>
-          {fleetCategories.map((vehicle, idx) => (
+          {FLEET_CATEGORIES.map((vehicle, idx) => (
             <motion.div
               key={vehicle.name}
               initial={{ opacity: 0, y: 20 }}

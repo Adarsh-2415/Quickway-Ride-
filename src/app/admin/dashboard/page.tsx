@@ -6,24 +6,25 @@ import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { WelcomeSection } from "@/components/admin/layout/WelcomeSection";
 import { DashboardStats } from "@/components/admin/layout/DashboardStats";
 
+import { getCurrentUserRole } from "@/lib/auth/serverAuth";
+
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Admin Dashboard | QuickWay Ride CMS",
   description: "Enterprise Administration Center for QuickWay Ride.",
 };
 
 export default async function AdminDashboardPage() {
-  const supabase = await createServerClientInstance();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { userId, email, role } = await getCurrentUserRole();
 
-  // Server-side auth guard
-  if (!user) {
-    redirect("/admin/login");
+  // Zero-Trust Server Guard: User must be authenticated and have an assigned valid role
+  if (!userId || !role) {
+    redirect("/admin/login?error=unauthorized_role");
   }
 
   return (
-    <DashboardLayout userEmail={user.email || "admin@quickwayride.com"}>
+    <DashboardLayout userEmail={email} userRole={role}>
       {/* Welcome Banner */}
       <WelcomeSection />
 

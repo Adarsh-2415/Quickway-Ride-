@@ -5,24 +5,25 @@ import { createServerClientInstance } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { ContactQueriesTable } from "@/components/admin/contact/ContactQueriesTable";
 
+import { getCurrentUserRole } from "@/lib/auth/serverAuth";
+
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Contact Queries | QuickWay Ride CMS",
   description: "Manage QuickWay Ride website contact form submissions.",
 };
 
 export default async function ContactQueriesPage() {
-  const supabase = await createServerClientInstance();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { userId, email, role } = await getCurrentUserRole();
 
   // Server-side auth guard
-  if (!user) {
-    redirect("/admin/login");
+  if (!userId || !role) {
+    redirect("/admin/login?error=unauthorized_role");
   }
 
   return (
-    <DashboardLayout userEmail={user.email || "admin@quickwayride.com"}>
+    <DashboardLayout userEmail={email} userRole={role}>
       <ContactQueriesTable />
     </DashboardLayout>
   );

@@ -205,8 +205,8 @@ export const BookingForm: React.FC = () => {
           <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-white tracking-tight">
             Reserve Your Uttarakhand Taxi
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
-            Instant booking confirmation • Zero surge pricing • Verified Drivers
+          <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto font-medium leading-relaxed">
+            Submit your travel details below ➔ Quick phone & WhatsApp confirmation by QuickWay Desk ➔ Doorstep Driver Arrival
           </p>
         </div>
 
@@ -245,7 +245,7 @@ export const BookingForm: React.FC = () => {
                     currentStep >= 1 ? "text-amber-400" : "text-slate-500"
                   )}
                 >
-                  1. Ride Details
+                  1. Journey Details
                 </span>
               </button>
 
@@ -297,7 +297,7 @@ export const BookingForm: React.FC = () => {
                     currentStep === 3 ? "text-amber-400" : "text-slate-500"
                   )}
                 >
-                  3. Rider Info
+                  3. Your Details
                 </span>
               </button>
             </div>
@@ -354,18 +354,21 @@ export const BookingForm: React.FC = () => {
               </div>
             )}
 
-            <div className="p-4 bg-white rounded-2xl border border-emerald-200 max-w-md mx-auto text-left space-y-2 text-xs text-slate-700 shadow-sm">
-              <div className="flex justify-between border-b pb-2">
-                <span className="font-semibold text-slate-500">Selected Vehicle:</span>
-                <span className="font-bold text-slate-900">{submittedData.vehicleType}</span>
+            <div className="p-4 bg-white rounded-2xl border border-emerald-200 max-w-md mx-auto text-left space-y-2.5 text-xs text-slate-700 shadow-sm">
+              <div className="flex justify-between items-center border-b pb-2 gap-2">
+                <span className="font-semibold text-slate-500 shrink-0">Selected Vehicle:</span>
+                <span className="font-bold text-slate-900 text-right">{submittedData.vehicleType}</span>
               </div>
-              <div className="flex justify-between border-b pb-2">
-                <span className="font-semibold text-slate-500">Contact Phone:</span>
-                <span className="font-bold text-slate-900">{submittedData.mobileNumber}</span>
+              <div className="flex justify-between items-center border-b pb-2 gap-2">
+                <span className="font-semibold text-slate-500 shrink-0">Contact Phone:</span>
+                <span className="font-bold text-slate-900">+91 {submittedData.mobileNumber}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="font-semibold text-slate-500">Status</span>
-                <span className="font-bold text-emerald-600">Booking request submitted successfully. Our team will contact you shortly.</span>
+              <div className="pt-1 space-y-1">
+                <span className="font-bold text-slate-600 uppercase tracking-wider block text-[10px]">Status:</span>
+                <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl font-bold text-emerald-800 text-xs leading-relaxed flex items-start gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>Booking request submitted successfully. Our team will contact you shortly.</span>
+                </div>
               </div>
             </div>
 
@@ -683,7 +686,7 @@ export const BookingForm: React.FC = () => {
                       className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-8 h-12 text-sm shadow-md cursor-pointer"
                       iconRight={<ArrowRight className="w-4 h-4" />}
                     >
-                      Next: Rider Details
+                      Next: Your Details
                     </Button>
                   </div>
                 </motion.div>
@@ -748,50 +751,21 @@ export const BookingForm: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Email & Promo Code */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label htmlFor="booking-email" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
-                        <Mail className="w-4 h-4 text-amber-500" /> Email Address
-                      </label>
-                      <input
-                        id="booking-email"
-                        type="email"
-                        placeholder="Enter email address"
-                        {...register("email")}
-                        className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
-                      />
-                      {errors.email && (
-                        <p className="text-xs font-semibold text-red-500 mt-1">{errors.email.message}</p>
-                      )}
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor="booking-promoCode" className="text-xs font-bold text-slate-700 uppercase tracking-wide block">
-                        Promo Code
-                      </label>
-                      <div className="flex gap-2">
-                        <input
-                          id="booking-promoCode"
-                          type="text"
-                          placeholder="Enter promo code"
-                          {...register("promoCode")}
-                          className="flex-1 h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white uppercase font-bold tracking-wider"
-                        />
-                        <button
-                          type="button"
-                          onClick={handlePromoApply}
-                          className="px-4 h-12 rounded-xl bg-slate-900 text-amber-400 font-bold text-xs hover:bg-slate-800 transition-colors shrink-0 flex items-center gap-1.5 cursor-pointer"
-                        >
-                          <Tag className="w-3.5 h-3.5" /> Apply
-                        </button>
-                      </div>
-                      {promoApplied && (
-                        <p className="text-xs font-bold text-emerald-600 mt-1">
-                          ✓ Promo Code Applied Successfully!
-                        </p>
-                      )}
-                    </div>
+                  {/* Email Address */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="booking-email" className="text-xs font-bold text-slate-700 uppercase tracking-wide flex items-center gap-1.5">
+                      <Mail className="w-4 h-4 text-amber-500" /> Email Address <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="booking-email"
+                      type="email"
+                      placeholder="Enter email address for instant booking receipt"
+                      {...register("email")}
+                      className="w-full h-12 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white shadow-xs font-medium"
+                    />
+                    {errors.email && (
+                      <p className="text-xs font-semibold text-red-500 mt-1">{errors.email.message}</p>
+                    )}
                   </div>
 
                   {/* Message */}
@@ -861,7 +835,7 @@ export const BookingForm: React.FC = () => {
                       className="bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold px-8 h-12 text-base shadow-xl shadow-amber-500/20 cursor-pointer"
                       iconRight={<CheckCircle2 className="w-5 h-5 stroke-[2.5]" />}
                     >
-                      Confirm & Lock Ride Now 🚖
+                      Confirm Now 🚖
                     </Button>
                   </div>
                 </motion.div>

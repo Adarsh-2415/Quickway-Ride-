@@ -11,9 +11,82 @@ import { SectionHeading } from "@/components/typography/Headings";
 import { BodyRegular } from "@/components/typography/Text";
 import { Button } from "@/components/buttons/Button";
 import { Badge } from "@/components/badges/Badge";
-import { ShieldCheck, Clock, Award, Users, ArrowRight, Sparkles } from "lucide-react";
+import { ShieldCheck, Clock, Award, Users, ArrowRight, Sparkles, Navigation, Car, MapPin } from "lucide-react";
+import {
+  fetchHomeSliderImagesAction,
+  fetchHomeTestimonialsAction,
+  fetchHomeFaqsAction,
+  fetchHomeAdvantagesAction,
+  fetchHomeTourCircuitsAction,
+} from "@/actions/home";
 
-export default function HomePage() {
+const ADVANTAGE_ICON_MAP: Record<string, React.ReactNode> = {
+  ShieldCheck: <ShieldCheck className="w-6 h-6 text-amber-600" />,
+  Clock: <Clock className="w-6 h-6 text-amber-600" />,
+  Award: <Award className="w-6 h-6 text-amber-600" />,
+  Users: <Users className="w-6 h-6 text-amber-600" />,
+  Sparkles: <Sparkles className="w-6 h-6 text-amber-600" />,
+  Navigation: <Navigation className="w-6 h-6 text-amber-600" />,
+  Car: <Car className="w-6 h-6 text-amber-600" />,
+  MapPin: <MapPin className="w-6 h-6 text-amber-600" />,
+};
+
+export default async function HomePage() {
+  const [sRes, tRes, fRes, aRes, cRes] = await Promise.all([
+    fetchHomeSliderImagesAction("public"),
+    fetchHomeTestimonialsAction("public"),
+    fetchHomeFaqsAction("public"),
+    fetchHomeAdvantagesAction("public"),
+    fetchHomeTourCircuitsAction("public"),
+  ]);
+
+  const slides = sRes.data || [];
+  const testimonials = tRes.data || [];
+  const faqs = fRes.data || [];
+  const advantages = aRes.data || [];
+  const tourCircuits = cRes.data || [];
+
+  const defaultAdvantages = [
+    {
+      title: "Safety Above Everything",
+      description: "100% background-checked drivers, GPS tracking, and daily sanitized vehicles for maximum rider safety.",
+      icon_name: "ShieldCheck",
+    },
+    {
+      title: "Guaranteed On-Time",
+      description: "Punctual pickups guaranteed for early morning airport flights, railway stations, and urgent trips.",
+      icon_name: "Clock",
+    },
+    {
+      title: "Transparent Pricing",
+      description: "No surge charges, no hidden night fees. Clear rate cards per kilometer with complete breakdown.",
+      icon_name: "Award",
+    },
+    {
+      title: "Live Support Desk",
+      description: "Dedicated operations desk in Roorkee & Dehradun available around the clock for trip assistance.",
+      icon_name: "Users",
+    },
+  ];
+
+  const defaultTourCircuits = [
+    {
+      title: "Haridwar Ganga Aarti & Pilgrimage Special",
+      description: "Direct pickup from Roorkee/Dehradun to Har Ki Pauri Ganga Aarti with evening return.",
+    },
+    {
+      title: "Rishikesh Rafting & Spiritual Escape",
+      description: "Visit Lakshman Jhula, Triveni Ghat Aarti, Beatles Ashram & Adventure River Rafting.",
+    },
+    {
+      title: "Dehradun & Mussoorie Queen of Hills",
+      description: "Explore Kempty Falls, Mall Road Mussoorie, Robber's Cave & Sahastradhara.",
+    },
+  ];
+
+  const activeAdvantages = advantages.length > 0 ? advantages : defaultAdvantages;
+  const activeCircuits = tourCircuits.length > 0 ? tourCircuits : defaultTourCircuits;
+
   const featuredFleet = [
     {
       name: "Swift Dzire / Etios",
@@ -49,33 +122,12 @@ export default function HomePage() {
     },
   ];
 
-  const popularCircuits = [
-    {
-      title: "Haridwar Ganga Aarti & Pilgrimage Special",
-      duration: "1 Day Circuit",
-      price: "₹1,800 Flat",
-      description: "Direct pickup from Roorkee/Dehradun to Har Ki Pauri Ganga Aarti with evening return.",
-    },
-    {
-      title: "Rishikesh Rafting & Spiritual Escape",
-      duration: "2 Days / 1 Night",
-      price: "₹3,200 Starting",
-      description: "Visit Lakshman Jhula, Triveni Ghat Aarti, Beatles Ashram & Adventure River Rafting.",
-    },
-    {
-      title: "Dehradun & Mussoorie Queen of Hills",
-      duration: "3 Days / 2 Nights",
-      price: "₹5,500 Starting",
-      description: "Explore Kempty Falls, Mall Road Mussoorie, Robber's Cave & Sahastradhara.",
-    },
-  ];
-
   return (
     <main className="min-h-screen bg-white text-slate-900">
-      {/* 1. Hero Section & Live Booking Engine */}
-      <HeroSection />
+      {/* 1. Hero Section & Background Slider (Supabase Driven) */}
+      <HeroSection slides={slides} />
 
-      {/* 2. Core Brand Values & Service Standards */}
+      {/* 2. Core Brand Values & Service Standards (Supabase Driven) */}
       <Section variant="default" padding="normal">
         <Container className="space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -89,29 +141,14 @@ export default function HomePage() {
           </div>
 
           <Grid cols={1} colsMd={2} colsLg={4} gap={6}>
-            <FeatureCard
-              icon={<ShieldCheck className="w-6 h-6 text-amber-600" />}
-              title="Safety Above Everything"
-              description="100% background-checked drivers, GPS tracking, and daily sanitized vehicles for maximum rider safety."
-            />
-
-            <FeatureCard
-              icon={<Clock className="w-6 h-6 text-amber-600" />}
-              title="Guaranteed On-Time"
-              description="Punctual pickups guaranteed for early morning airport flights, railway stations, and urgent trips."
-            />
-
-            <FeatureCard
-              icon={<Award className="w-6 h-6 text-amber-600" />}
-              title="Transparent Pricing"
-              description="No surge charges, no hidden night fees. Clear rate cards per kilometer with complete breakdown."
-            />
-
-            <FeatureCard
-              icon={<Users className="w-6 h-6 text-amber-600" />}
-              title="Live Support Desk"
-              description="Dedicated operations desk in Roorkee & Dehradun available around the clock for trip assistance."
-            />
+            {activeAdvantages.map((adv, idx) => (
+              <FeatureCard
+                key={adv.id || idx}
+                icon={ADVANTAGE_ICON_MAP[adv.icon_name] || <ShieldCheck className="w-6 h-6 text-amber-600" />}
+                title={adv.title}
+                description={adv.description}
+              />
+            ))}
           </Grid>
         </Container>
       </Section>
@@ -169,10 +206,10 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* 4. Customer Testimonials Section (CMS Ready) */}
-      <TestimonialsSection />
+      {/* 4. Customer Testimonials Section (Supabase Driven) */}
+      <TestimonialsSection testimonials={testimonials} />
 
-      {/* 5. Popular Uttarakhand Tour Packages Preview */}
+      {/* 5. Popular Uttarakhand Tour Packages Preview (Supabase Driven) */}
       <Section variant="default" padding="normal">
         <Container className="space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-3">
@@ -186,12 +223,8 @@ export default function HomePage() {
           </div>
 
           <Grid cols={1} colsMd={3} gap={6}>
-            {popularCircuits.map((p) => (
-              <Card key={p.title} variant="standard" isHoverable className="space-y-4">
-                <div className="flex items-center justify-between text-xs font-bold text-amber-700 bg-amber-50 p-2.5 rounded-lg border border-amber-200/60">
-                  <span>{p.duration}</span>
-                  <span>{p.price}</span>
-                </div>
+            {activeCircuits.map((p, idx) => (
+              <Card key={p.id || idx} variant="standard" isHoverable className="space-y-4">
                 <h3 className="font-heading font-bold text-lg text-slate-900 leading-snug">{p.title}</h3>
                 <BodyRegular className="text-sm">{p.description}</BodyRegular>
                 <div className="pt-2">
@@ -207,8 +240,8 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* 6. Frequently Asked Questions (FAQ) Section (CMS Ready) */}
-      <FAQSection />
+      {/* 6. Frequently Asked Questions (FAQ) Section (Supabase Driven) */}
+      <FAQSection faqs={faqs} />
     </main>
   );
 }

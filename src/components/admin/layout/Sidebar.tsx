@@ -9,22 +9,26 @@ import { LayoutDashboard, FileText, Car, Mail, Lock, LogOut, User, X, ShieldChec
 import { signOutAdminAction } from "@/actions/authActions";
 import { cn } from "@/lib/utils";
 
+import { isRouteAllowedForRole } from "@/lib/auth/permissions";
+
 export interface SidebarProps {
   userEmail?: string;
+  userRole?: string;
   isCollapsed?: boolean;
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
-  userEmail = "admin@quickwayride.com",
+  userEmail = "",
+  userRole = "",
   isCollapsed = false,
   isOpenMobile = false,
   onCloseMobile,
 }) => {
   const pathname = usePathname();
 
-  const menuItems = [
+  const allMenuItems = [
     {
       label: "Dashboard",
       href: "/admin/dashboard",
@@ -51,6 +55,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: Lock,
     },
   ];
+
+  // Dynamically filter menu items based on single source of truth permissions registry
+  const menuItems = allMenuItems.filter((item) => isRouteAllowedForRole(userRole, item.href));
 
   const sidebarContent = (
     <div
