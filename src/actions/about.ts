@@ -2,6 +2,7 @@
 
 import { createServerClientInstance } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 export interface AboutStatItem {
   label: string;
@@ -261,6 +262,10 @@ export async function publishAboutChangesAction() {
       console.error("Publish about page content error:", cErr.message);
       return { success: false, error: cErr.message };
     }
+
+    // Instantly purge Next.js static page cache & Vercel Edge CDN cache
+    revalidatePath("/about");
+    revalidatePath("/about/preview");
 
     return { success: true, count: cData?.length || 0 };
   } catch (err: any) {

@@ -2,6 +2,7 @@
 
 import { createServerClientInstance } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 export interface ServiceItemRecord {
   id: string;
@@ -327,6 +328,10 @@ export async function publishServicesChangesAction() {
     if (cErr) console.error("Publish services page content warning:", cErr.message);
 
     const publishedCount = (sData?.length || 0) + (cData?.length || 0);
+
+    // Instantly purge Next.js static page cache & Vercel Edge CDN cache
+    revalidatePath("/services");
+    revalidatePath("/services/preview");
 
     return { success: true, count: publishedCount };
   } catch (err: any) {

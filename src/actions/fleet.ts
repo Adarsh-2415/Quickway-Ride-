@@ -2,6 +2,7 @@
 
 import { createServerClientInstance } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 export interface FleetVehicleRecord {
   id: string;
@@ -387,6 +388,10 @@ export async function publishFleetChangesAction() {
     if (cErr) console.error("Publish fleet page content warning:", cErr.message);
 
     const publishedCount = (vData?.length || 0) + (cData?.length || 0);
+
+    // Instantly purge Next.js static page cache & Vercel Edge CDN cache
+    revalidatePath("/fleet");
+    revalidatePath("/fleet/preview");
 
     return { success: true, count: publishedCount };
   } catch (err: any) {

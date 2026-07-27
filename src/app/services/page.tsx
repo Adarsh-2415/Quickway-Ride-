@@ -7,6 +7,8 @@ import { ServiceGuarantees } from "@/components/features/services/ServiceGuarant
 import { ServicesCTA } from "@/components/features/services/ServicesCTA";
 import { fetchServicesListAction, fetchServicesPageContentAction } from "@/actions/services";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Services Offered | QuickWay Ride - Premium Taxi & Travel Platform",
   description:

@@ -9,6 +9,8 @@ import { WhyChooseUs } from "@/components/features/about/WhyChooseUs";
 import { AboutCTA } from "@/components/features/about/AboutCTA";
 import { fetchAboutPageContentAction } from "@/actions/about";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "About Us | QuickWay Ride - Premium Uttarakhand Taxi & Travel Platform",
   description:

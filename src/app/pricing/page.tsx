@@ -5,6 +5,8 @@ import { Section } from "@/components/layout/Section";
 import { PricingGrid } from "@/components/features/pricing/PricingGrid";
 import { Sparkles, Tag } from "lucide-react";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Official Oneway Taxi Rate List | QuickWay Ride Dehradun Cabs",
   description:

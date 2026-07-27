@@ -6,6 +6,8 @@ import { FleetFeatures } from "@/components/features/fleet/FleetFeatures";
 import { FleetCTA } from "@/components/features/fleet/FleetCTA";
 import { fetchFleetVehiclesAction, fetchFleetPageContentAction } from "@/actions/fleet";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Fleet Directory | QuickWay Ride - Sedans, MPVs, Innova & Tempo Travellers",
   description:

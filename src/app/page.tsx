@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+
+export const revalidate = 0;
 import { HeroSection } from "@/components/features/home/HeroSection";
 import { TestimonialsSection } from "@/components/features/home/testimonials";
 import { FAQSection } from "@/components/features/home/faq";

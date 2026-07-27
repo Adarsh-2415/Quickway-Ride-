@@ -3,6 +3,7 @@
 import { createServerClientInstance } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { requireAdminServerAction } from "@/lib/auth/serverAuth";
+import { revalidatePath } from "next/cache";
 
 export interface HomeSliderImageRecord {
   id: string;
@@ -723,6 +724,10 @@ export async function publishHomeChangesAction() {
       (faqRes.data?.length || 0) +
       (advRes.data?.length || 0) +
       (circRes.data?.length || 0);
+
+    // Instantly purge Next.js static page cache & Vercel Edge CDN cache
+    revalidatePath("/");
+    revalidatePath("/preview/home");
 
     return { success: true, count };
   } catch (err: any) {

@@ -2,6 +2,7 @@
 
 import { createServerClientInstance } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
+import { revalidatePath } from "next/cache";
 
 export interface VehicleRecord {
   id: string;
@@ -337,6 +338,11 @@ export async function publishPricingAction() {
       .select();
 
     if (pricesError) console.warn("Prices publish warning:", pricesError.message);
+
+    // Instantly purge Next.js static page cache & Vercel Edge CDN cache
+    revalidatePath("/pricing");
+    revalidatePath("/pricing/preview");
+    revalidatePath("/");
 
     return {
       success: true,
