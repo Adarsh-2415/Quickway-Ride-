@@ -157,7 +157,7 @@ export async function saveFleetVehicleAction(formData: FormData) {
     const description = (formData.get("description") as string) || "";
     const featuresRaw = (formData.get("features") as string) || "";
 
-    const imageFile = formData.get("image_file") as File | null;
+    const imageFile = formData.get("image") as File | null;
     const existingImageUrl = (formData.get("existing_image_url") as string) || "";
     const existingFilePathsRaw = (formData.get("existing_file_paths") as string) || "[]";
 
@@ -206,7 +206,7 @@ export async function saveFleetVehicleAction(formData: FormData) {
       name: name.trim(),
       category: category.trim(),
       tab_category: tab_category.trim(),
-      image_url: imageUrl || "/images/swift.jfif",
+      image_url: imageUrl,
       seating: seating.trim(),
       luggage: luggage.trim(),
       ac_type: ac_type.trim(),
