@@ -13,89 +13,6 @@ import { Button } from "@/components/buttons/Button";
 import { VehicleSpecModal, FleetVehicle } from "./VehicleSpecModal";
 import { cn } from "@/lib/utils";
 
-const FLEET_ROSTER: FleetVehicle[] = [
-  {
-    id: "sedan",
-    name: "Sedan Category (Dzire / Aura)",
-    category: "Sedan",
-    tabCategory: "sedan",
-    image: "/images/swift.jfif",
-    seating: "4 + 1 Passengers",
-    luggage: "2 Medium, 1 Cabin, 1 Backpack",
-    acType: "AC (Plains)",
-    fuelType: "Petrol / Petrol+CNG",
-    perKmRate: "₹11 - ₹12 / KM",
-    idealFor: "Couples, small families & 1-way outstation drops",
-    features: [
-      "Plush fabric seating",
-      "Fast-charging mobile USB ports",
-      "Spacious boot for 3 suitcases",
-      "Smooth city & highway suspension",
-    ],
-    description: "Our compact sedan fleet comprising Maruti Suzuki Dzire and Hyundai Aura delivers unmatched fuel efficiency, smooth highway rides, and clean comfortable seating for 4 passengers.",
-  },
-  {
-    id: "ertiga",
-    name: "MPV Category (Ertiga / Rumion)",
-    category: "Ertiga & MPV",
-    tabCategory: "mpv",
-    image: "/images/ertiga.jfif",
-    seating: "6 + 1 Passengers",
-    luggage: "3 Medium, 1 Cabin, 1 Backpack",
-    acType: "AC (Plains)",
-    fuelType: "Petrol / Petrol+CNG / Diesel",
-    perKmRate: "₹14 - ₹15 / KM",
-    idealFor: "Family trips, hill station tours & outstation travel",
-    features: [
-      "Flexible 3-row seating",
-      "Rear air-conditioning vents",
-      "Roof luggage carrier option",
-      "High ground clearance for hill roads",
-    ],
-    description: "The 7-seater Maruti Ertiga and Toyota Rumion provide the perfect balance between spacious family seating and economical outstation travel across Uttarakhand, Himachal & Punjab.",
-  },
-  {
-    id: "innova",
-    name: "Luxury SUV (Innova Crysta / Hycross)",
-    category: "Innova Category",
-    tabCategory: "suv",
-    image: "/images/innova crysta.jfif",
-    seating: "6+1 / 7+1 Captain Seats",
-    luggage: "3 Large, 1 Medium, 1 Backpack",
-    acType: "Dual Executive AC",
-    fuelType: "Diesel / Hybrid",
-    perKmRate: "₹18 - ₹20 / KM",
-    idealFor: "VIPs, executive delegations, long hill tours & Char Dham Yatra",
-    features: [
-      "Luxurious leather captain seats",
-      "Dual-zone automatic climate control",
-      "All-terrain hill driving capability",
-      "Premium ambient cabin lighting",
-    ],
-    description: "The gold standard of Indian road travel. Our Toyota Innova Crysta features plush captain seating, dual executive AC, and supreme ride comfort for long outstation tours and Char Dham Yatra.",
-  },
-  {
-    id: "tempo-traveller",
-    name: "Urbania & Maharaja (Tempo Traveller)",
-    category: "Urbania & Maharaja",
-    tabCategory: "traveller",
-    image: "/images/Tempo Traveller.jfif",
-    seating: "12 to 26 Seater",
-    luggage: "Heavy Roof Carrier + Boot",
-    acType: "Dual Executive AC Vents",
-    fuelType: "Diesel",
-    perKmRate: "₹25 - ₹28 / KM",
-    idealFor: "Large family reunions, wedding groups, corporate outings & pilgrimages",
-    features: [
-      "Pushback recliner seats with armrests",
-      "Individual AC blower vents",
-      "Heavy duty roof luggage carrier",
-      "High roof standing clearance & LED TV",
-    ],
-    description: "Our luxury Force Urbania and Maharaja Tempo Travellers offer 12 to 26 recliner seat configurations for large family tours, wedding baraat transport, and group pilgrimages.",
-  },
-];
-
 export interface FleetGridProps {
   vehicles?: FleetVehicle[];
 }
@@ -104,7 +21,7 @@ export const FleetGrid: React.FC<FleetGridProps> = ({ vehicles }) => {
   const [selectedTab, setSelectedTab] = useState("all");
   const [activeModalVehicle, setActiveModalVehicle] = useState<FleetVehicle | null>(null);
 
-  const fleetList = vehicles && vehicles.length > 0 ? vehicles : FLEET_ROSTER;
+  const fleetList = vehicles || [];
 
   const categories = [
     { id: "all", label: "All Vehicles" },
