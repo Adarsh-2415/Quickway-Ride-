@@ -116,10 +116,10 @@ export async function createBookingAction(formData: BookingFormValues) {
 
     const savedRecord = data ? data[0] : null;
 
-    // Trigger non-blocking Email Notifications (Admin alert + Customer confirmation)
+    // Trigger Email Notifications (Admin alert + Customer confirmation)
     if (savedRecord) {
-      sendBookingNotificationEmails(savedRecord).catch((emailErr) => {
-        console.error("[createBookingAction] Non-blocking email dispatch error:", emailErr);
+      await sendBookingNotificationEmails(savedRecord).catch((emailErr) => {
+        console.error("[createBookingAction] Email dispatch warning:", emailErr);
       });
     }
 
