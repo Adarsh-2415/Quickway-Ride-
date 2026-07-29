@@ -7,17 +7,21 @@ import { Footer } from "@/components/layout/Footer";
 import { MaintenancePage } from "@/components/common/MaintenancePage";
 import { getMaintenanceModeAction } from "@/actions/maintenance";
 
-export const MainLayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export interface MainLayoutWrapperProps {
+  children: React.ReactNode;
+  initialMaintenanceMode?: boolean;
+}
+
+export const MainLayoutWrapper: React.FC<MainLayoutWrapperProps> = ({
+  children,
+  initialMaintenanceMode = false,
+}) => {
   const pathname = usePathname();
   const isAdminRoute = pathname?.startsWith("/admin");
-  const [isMaintenanceMode, setIsMaintenanceMode] = useState<boolean>(false);
-  const [isCheckingMode, setIsCheckingMode] = useState<boolean>(!isAdminRoute);
+  const [isMaintenanceMode, setIsMaintenanceMode] = useState<boolean>(initialMaintenanceMode);
 
   useEffect(() => {
-    if (isAdminRoute) {
-      setIsCheckingMode(false);
-      return;
-    }
+    if (isAdminRoute) return;
 
     let isMounted = true;
     getMaintenanceModeAction()
@@ -28,9 +32,6 @@ export const MainLayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ chi
       })
       .catch((err) => {
         console.warn("[MainLayoutWrapper] Maintenance check warning:", err);
-      })
-      .finally(() => {
-        if (isMounted) setIsCheckingMode(false);
       });
 
     return () => {
@@ -43,8 +44,8 @@ export const MainLayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ chi
     return <div className="w-full flex-1 flex flex-col min-h-screen">{children}</div>;
   }
 
-  // When Maintenance Mode is active, render ONLY the MaintenancePage (No Header, No Footer, No Page Components)
-  if (!isCheckingMode && isMaintenanceMode) {
+  // When Maintenance Mode is active, render ONLY the MaintenancePage (Zero Flash, Server SSR pre-rendered)
+  if (isMaintenanceMode) {
     return <MaintenancePage />;
   }
 

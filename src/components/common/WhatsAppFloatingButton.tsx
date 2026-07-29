@@ -4,21 +4,26 @@ import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle } from "lucide-react";
-
 import { getMaintenanceModeAction } from "@/actions/maintenance";
 
-export const WhatsAppFloatingButton: React.FC = () => {
+export interface WhatsAppFloatingButtonProps {
+  initialMaintenanceMode?: boolean;
+}
+
+export const WhatsAppFloatingButton: React.FC<WhatsAppFloatingButtonProps> = ({
+  initialMaintenanceMode = false,
+}) => {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
   const [showNotification, setShowNotification] = useState(true);
-  const [isMaintenance, setIsMaintenance] = useState(false);
+  const [isMaintenance, setIsMaintenance] = useState(initialMaintenanceMode);
 
   useEffect(() => {
     let isMounted = true;
     getMaintenanceModeAction()
       .then((res) => {
-        if (isMounted && res.success && res.maintenanceMode) {
-          setIsMaintenance(true);
+        if (isMounted && res.success) {
+          setIsMaintenance(res.maintenanceMode);
         }
       })
       .catch(() => {});
@@ -76,43 +81,26 @@ export const WhatsAppFloatingButton: React.FC = () => {
         animate={{
           scale: 1,
           opacity: 1,
-          y: [0, -4, 0], // Subtle continuous idle float animation
         }}
-        transition={{
-          y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-          scale: { type: "spring", stiffness: 300, damping: 20 },
-        }}
-        className="relative group flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white shadow-2xl shadow-emerald-500/40 hover:shadow-emerald-500/60 border-2 border-emerald-300/40 cursor-pointer"
+        className="relative group cursor-pointer"
         aria-label="Chat on WhatsApp with QuickWay Ride"
       >
-        {/* Ambient Pulsing Glow Aura */}
-        <motion.div
-          animate={{
-            scale: [1, 1.35, 1],
-            opacity: [0.5, 0, 0.5],
-          }}
-          transition={{
-            duration: 2.4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="absolute inset-0 rounded-full bg-emerald-500 -z-10 blur-sm pointer-events-none"
-        />
+        {/* Dual Pulsing Outer Glow Aura */}
+        <span className="absolute -inset-1 rounded-full bg-emerald-500/40 opacity-75 group-hover:opacity-100 blur-sm animate-pulse transition-all duration-300" />
+        <span className="absolute -inset-2 rounded-full bg-emerald-500/20 opacity-50 group-hover:opacity-80 blur-md animate-ping transition-all duration-500" />
 
-        {/* Unread Red Notification Dot Badge */}
-        {showNotification && (
-          <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 rounded-full bg-rose-500 text-white text-[10px] font-extrabold border-2 border-white shadow-sm animate-bounce">
-            1
+        {/* Main Floating Button Badge */}
+        <div className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white shadow-xl shadow-emerald-950/30 border-2 border-white/20 group-hover:border-white/50 transition-all duration-300">
+          <MessageCircle className="w-7 h-7 fill-white/10 stroke-[2.2]" />
+
+          {/* Unread Red Notification Dot */}
+          <span className="absolute -top-1 -right-1 flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-rose-500 text-[9px] font-extrabold text-white items-center justify-center shadow-xs">
+              1
+            </span>
           </span>
-        )}
-
-        {/* WhatsApp Icon (SVG for perfect high-res brand fidelity) */}
-        <svg
-          className="w-7 h-7 fill-current drop-shadow-sm transition-transform duration-300 group-hover:scale-110"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.964 9.964 0 001.333 4.993L2 22l5.233-1.37a9.994 9.994 0 004.779 1.218h.004c5.506 0 9.989-4.478 9.99-9.984.001-2.668-1.034-5.176-2.919-7.063C17.202 3.036 14.693 2 12.012 2zm5.836 14.489c-.247.692-1.229 1.331-2.008 1.498-.535.114-1.233.205-3.585-.768-3.008-1.246-4.945-4.305-5.096-4.506-.149-.2-1.226-1.632-1.226-3.113 0-1.48.775-2.209 1.052-2.508.277-.299.604-.374.805-.374.201 0 .402.002.578.01.187.009.438-.071.687.525.25.597.854 2.083.928 2.234.075.151.125.328.025.527-.1.201-.151.326-.299.502-.15.176-.316.393-.45.527-.149.15-.304.313-.131.611.173.298.768 1.268 1.65 2.053 1.134 1.011 2.091 1.325 2.389 1.474.298.15.472.125.647-.075.175-.201.751-.876.952-1.176.2-.301.401-.251.676-.15.276.1.1.752 1.353 2.115 1.776.363.363.603.603.678.728.075.125.125.653-.122 1.345z" />
-        </svg>
+        </div>
       </motion.a>
     </div>
   );

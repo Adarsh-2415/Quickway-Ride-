@@ -4,6 +4,8 @@ import "./globals.css";
 import { AppProviders } from "@/providers";
 import { SITE_CONFIG } from "@/constants/siteConfig";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
+import { WhatsAppFloatingButton } from "@/components/common/WhatsAppFloatingButton";
+import { getMaintenanceModeAction } from "@/actions/maintenance";
 
 const outfitFont = Outfit({
   subsets: ["latin"],
@@ -52,13 +54,15 @@ export const metadata: Metadata = {
   },
 };
 
-import { WhatsAppFloatingButton } from "@/components/common/WhatsAppFloatingButton";
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Server-Side maintenance status check for instant zero-delay SSR rendering
+  const mRes = await getMaintenanceModeAction();
+  const initialMaintenanceMode = mRes.success ? mRes.maintenanceMode : false;
+
   return (
     <html
       lang="en"
@@ -66,8 +70,10 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-white text-slate-900 antialiased selection:bg-amber-500 selection:text-slate-900 flex flex-col justify-between">
         <AppProviders>
-          <MainLayoutWrapper>{children}</MainLayoutWrapper>
-          <WhatsAppFloatingButton />
+          <MainLayoutWrapper initialMaintenanceMode={initialMaintenanceMode}>
+            {children}
+          </MainLayoutWrapper>
+          <WhatsAppFloatingButton initialMaintenanceMode={initialMaintenanceMode} />
         </AppProviders>
       </body>
     </html>
