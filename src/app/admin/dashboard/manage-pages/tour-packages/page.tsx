@@ -5,6 +5,8 @@ import { createServerClientInstance } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { TourPackagesEditor } from "@/components/admin/pages/packages/TourPackagesEditor";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Tour Packages Management | QuickWay Ride CMS",
   description: "Manage tour packages shown on the public website with Draft to Publish workflow.",

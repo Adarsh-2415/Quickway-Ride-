@@ -583,9 +583,6 @@ export const BookingForm: React.FC = () => {
                             <span className="text-[10px] font-extrabold uppercase tracking-wide bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full shadow-xs">
                               {v.popularTag}
                             </span>
-                            <span className="font-extrabold text-slate-900 text-sm bg-slate-100 px-2.5 py-1 rounded-lg">
-                              {v.rate}
-                            </span>
                           </div>
 
                           {/* Image & Title */}

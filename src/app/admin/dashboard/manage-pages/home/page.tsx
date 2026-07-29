@@ -7,6 +7,8 @@ import { HomeEditor } from "@/components/admin/pages/home/HomeEditor";
 
 import { getCurrentUserRole } from "@/lib/auth/serverAuth";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Home Page Management | QuickWay Ride CMS",
   description: "Manage Hero Slider Images, Testimonials, and FAQs with Draft to Publish workflow.",

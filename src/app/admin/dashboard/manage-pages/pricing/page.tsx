@@ -5,6 +5,8 @@ import { createServerClientInstance } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { PricingEditor } from "@/components/admin/pages/pricing/PricingEditor";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Pricing Rate List Editor | QuickWay Ride CMS",
   description: "Manage destination pricing fares for Sedan, Ertiga, and Innova Crysta.",

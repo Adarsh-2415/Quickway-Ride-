@@ -5,6 +5,8 @@ import { createServerClientInstance } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { GalleryEditor } from "@/components/admin/pages/gallery/GalleryEditor";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Gallery Page Editor | QuickWay Ride CMS",
   description: "Manage fleet and tour gallery images with Draft to Publish workflow.",

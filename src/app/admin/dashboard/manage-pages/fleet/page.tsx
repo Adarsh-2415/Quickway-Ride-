@@ -5,6 +5,8 @@ import { createServerClientInstance } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/admin/layout/DashboardLayout";
 import { FleetEditor } from "@/components/admin/pages/fleet/FleetEditor";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Fleet Directory Management | QuickWay Ride CMS",
   description: "Manage fleet vehicles and page content with Draft to Publish workflow.",

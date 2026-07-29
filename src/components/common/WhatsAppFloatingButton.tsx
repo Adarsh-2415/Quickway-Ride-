@@ -5,13 +5,31 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
+import { getMaintenanceModeAction } from "@/actions/maintenance";
+
 export const WhatsAppFloatingButton: React.FC = () => {
   const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
   const [showNotification, setShowNotification] = useState(true);
+  const [isMaintenance, setIsMaintenance] = useState(false);
 
-  // Automatically hide WhatsApp button on Booking page (/book) and CMS Admin portal (/admin/*)
-  if (pathname.startsWith("/book") || pathname.startsWith("/admin")) {
+  useEffect(() => {
+    let isMounted = true;
+    getMaintenanceModeAction()
+      .then((res) => {
+        if (isMounted && res.success && res.maintenanceMode) {
+          setIsMaintenance(true);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, [pathname]);
+
+  // Automatically hide WhatsApp button on Maintenance mode, Booking page (/book) and CMS Admin portal (/admin/*)
+  if (isMaintenance || pathname.startsWith("/book") || pathname.startsWith("/admin")) {
     return null;
   }
 
